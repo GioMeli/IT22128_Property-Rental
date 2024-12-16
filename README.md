@@ -1,4 +1,8 @@
-# IT22128_Property-Rental
+
+![image](https://github.com/user-attachments/assets/b9a7150d-e12d-47da-8a2e-29c086464c24)
+
+
+![image](https://github.com/user-attachments/assets/a4a291a2-a8a0-4fe7-8b4c-5214a17fe966)
 
 
 ![image](https://github.com/user-attachments/assets/aa734215-4ed3-4399-8edb-6cf4dc5824a0)
