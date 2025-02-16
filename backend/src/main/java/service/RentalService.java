@@ -1,11 +1,11 @@
-package com.example.rentalsystem.service;
+package com.rentalmanagement.service;
 
-import com.example.rentalsystem.model.Property;
-import com.example.rentalsystem.model.Rental;
-import com.example.rentalsystem.model.User;
-import com.example.rentalsystem.repository.RentalRepository;
-import com.example.rentalsystem.repository.PropertyRepository;
-import com.example.rentalsystem.repository.UserRepository;
+import com.rentalmanagement.model.Property;
+import com.rentalmanagement.model.Rental;
+import com.rentalmanagement.model.User;
+import com.rentalmanagement.repository.RentalRepository;
+import com.rentalmanagement.repository.PropertyRepository;
+import com.rentalmanagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class RentalService {
     @Autowired
     private UserRepository userRepository;
 
-    // Δημιουργία νέας ενοικίασης
+    // Create a new rental
     @Transactional
     public Rental createRental(Long userId, Long propertyId, String rentalPeriod) {
         Optional<User> userOpt = userRepository.findById(userId);
@@ -35,41 +35,41 @@ public class RentalService {
             User user = userOpt.get();
             Property property = propertyOpt.get();
 
-            // Ελέγξτε αν το ακίνητο είναι διαθέσιμο
+            // Check if the property is available
             if (!property.isAvailable()) {
                 throw new IllegalArgumentException("Property is not available for rent.");
             }
 
-            // Δημιουργία ενοικίασης
+            // Create a new rental
             Rental rental = new Rental();
             rental.setUser(user);
             rental.setProperty(property);
             rental.setRentalPeriod(rentalPeriod);
             rental.setStatus("Active");
 
-            // Αποθήκευση ενοικίασης
+            // Save the rental
             return rentalRepository.save(rental);
         } else {
             throw new IllegalArgumentException("Invalid user or property.");
         }
     }
 
-    // Εύρεση όλων των ενοικιάσεων για έναν χρήστη
+    // Find all rentals for a given user
     public List<Rental> getRentalsByUser(Long userId) {
         return rentalRepository.findByUserId(userId);
     }
 
-    // Εύρεση όλων των ενεργών ενοικιάσεων
+    // Find all active rentals
     public List<Rental> getActiveRentals() {
         return rentalRepository.findByStatus("Active");
     }
 
-    // Εύρεση όλων των ενοικιάσεων για ένα ακίνητο
+    // Find all rentals for a given property
     public List<Rental> getRentalsByProperty(Long propertyId) {
         return rentalRepository.findByPropertyId(propertyId);
     }
 
-    // Ακύρωση ενοικίασης
+    // Cancel a rental
     @Transactional
     public Rental cancelRental(Long rentalId) {
         Optional<Rental> rentalOpt = rentalRepository.findById(rentalId);
@@ -82,7 +82,7 @@ public class RentalService {
         }
     }
 
-    // Επιστροφή ακινήτου (με την έννοια ότι το ακίνητο είναι ξανά διαθέσιμο για ενοικίαση)
+    // Return a property (i.e., make the property available for rental again)
     @Transactional
     public Property returnProperty(Long rentalId) {
         Optional<Rental> rentalOpt = rentalRepository.findById(rentalId);
@@ -91,7 +91,7 @@ public class RentalService {
             rental.setStatus("Completed");
 
             Property property = rental.getProperty();
-            property.setAvailable(true); // Κάνουμε το ακίνητο διαθέσιμο ξανά
+            property.setAvailable(true); // Make the property available again
             propertyRepository.save(property);
             rentalRepository.save(rental);
             return property;
