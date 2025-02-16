@@ -25,7 +25,6 @@ public class RentalService {
     @Autowired
     private UserRepository userRepository;
 
-    // Create a new rental
     @Transactional
     public Rental createRental(Long userId, Long propertyId, String rentalPeriod) {
         Optional<User> userOpt = userRepository.findById(userId);
@@ -35,41 +34,35 @@ public class RentalService {
             User user = userOpt.get();
             Property property = propertyOpt.get();
 
-            // Check if the property is available
+            // Check if the property is available (make sure Property has an isAvailable() method)
             if (!property.isAvailable()) {
                 throw new IllegalArgumentException("Property is not available for rent.");
             }
 
-            // Create a new rental
             Rental rental = new Rental();
             rental.setUser(user);
             rental.setProperty(property);
             rental.setRentalPeriod(rentalPeriod);
             rental.setStatus("Active");
 
-            // Save the rental
             return rentalRepository.save(rental);
         } else {
             throw new IllegalArgumentException("Invalid user or property.");
         }
     }
 
-    // Find all rentals for a given user
     public List<Rental> getRentalsByUser(Long userId) {
         return rentalRepository.findByUserId(userId);
     }
 
-    // Find all active rentals
     public List<Rental> getActiveRentals() {
         return rentalRepository.findByStatus("Active");
     }
 
-    // Find all rentals for a given property
     public List<Rental> getRentalsByProperty(Long propertyId) {
         return rentalRepository.findByPropertyId(propertyId);
     }
 
-    // Cancel a rental
     @Transactional
     public Rental cancelRental(Long rentalId) {
         Optional<Rental> rentalOpt = rentalRepository.findById(rentalId);
@@ -82,7 +75,6 @@ public class RentalService {
         }
     }
 
-    // Return a property (i.e., make the property available for rental again)
     @Transactional
     public Property returnProperty(Long rentalId) {
         Optional<Rental> rentalOpt = rentalRepository.findById(rentalId);
@@ -91,7 +83,8 @@ public class RentalService {
             rental.setStatus("Completed");
 
             Property property = rental.getProperty();
-            property.setAvailable(true); // Make the property available again
+            property.setAvailable(true);
+            // Save the property and rental updates
             propertyRepository.save(property);
             rentalRepository.save(rental);
             return property;
