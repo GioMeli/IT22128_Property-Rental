@@ -3,6 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Parent POM for Spring Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.2</version>  <!-- Set latest stable Spring Boot version -->
+        <relativePath/> <!-- Lookup parent from repository -->
+    </parent>
+
     <groupId>com.rentalmanagement</groupId>
     <artifactId>rental-management-backend</artifactId>
     <version>1.0.0</version>
@@ -13,7 +21,6 @@
 
     <properties>
         <java.version>17</java.version> <!-- Set the Java version -->
-        <spring-boot.version>3.2.2</spring-boot.version>
     </properties>
 
     <dependencies>
@@ -30,25 +37,10 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Hibernate ORM -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.4.0.Final</version>
-        </dependency>
-
         <!-- MySQL Connector -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.0.33</version>
-        </dependency>
-
-        <!-- Jakarta Persistence API (for @Entity, @Table, etc.) -->
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.1.0</version>
         </dependency>
 
         <!-- Spring Security -->
@@ -61,7 +53,7 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.11.5</version>
+            <version>0.11.5</version> <!-- External library needs explicit version -->
         </dependency>
 
         <!-- Lombok (Reduces Boilerplate Code) -->
@@ -93,7 +85,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
             </plugin>
 
             <!-- Compiler Plugin to Use Java 17 -->
@@ -111,5 +102,6 @@
     </build>
 
 </project>
+
 
 
