@@ -1,6 +1,11 @@
 package com.rentalmanagement.model;
 
-import javax.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 @Table(name = "rentals")
@@ -9,7 +14,6 @@ public class Rental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Assuming a rental is associated with one user and one property
     @ManyToOne
     private User user;
 
@@ -17,10 +21,9 @@ public class Rental {
     private Property property;
 
     private String rentalPeriod;
-    private String status; // e.g. "Active", "Cancelled", "Completed"
+    private String status;
 
-    // Getters and Setters
-
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -52,3 +55,4 @@ public class Rental {
         this.status = status;
     }
 }
+
