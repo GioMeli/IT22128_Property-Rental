@@ -25,16 +25,15 @@ const Home = () => {
 
   return (
     <div style={styles.container}>
-      {/* Header: Black bar with logo, title, and "Contact Us" link */}
+      {/* Header: Black bar with logo, title, and navigation links */}
       <div style={styles.header}>
         <div style={styles.logoContainer}>
           <img src={rentalLogo} alt="Rental Logo" style={styles.logo} />
           <h1 style={styles.headerTitle}>Rental Properties Application</h1>
         </div>
         <div style={styles.nav}>
-          <Link to="/contact" style={styles.navLink}>
-            Contact Us
-          </Link>
+          <Link to="/contact" style={styles.navLink}>Contact Us</Link>
+          <Link to="/application-form" style={styles.navLink}>Application Form</Link> {/* New Button */}
         </div>
       </div>
 
@@ -86,12 +85,16 @@ const styles = {
     fontSize: "36px",
   },
   nav: {
-    marginRight: "20px",
+    display: "flex",
+    gap: "20px",
   },
   navLink: {
     color: "white",
     textDecoration: "none",
     fontSize: "18px",
+    padding: "10px 15px",
+    backgroundColor: "#444",
+    borderRadius: "5px",
   },
   welcome: {
     textAlign: "center",
@@ -126,4 +129,5 @@ const styles = {
 };
 
 export default Home;
+
 
