@@ -1,20 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    // TODO: Replace this with your real login logic (e.g., call backend)
-    // For now, let's assume it's always successful:
-    if (username && password) {
-      navigate("/home"); // Go to the Home page
-    } else {
-      alert("Please enter both username and password");
+    setErrorMessage(""); // Clear previous error
+    try {
+      // Replace with your backend login endpoint URL.
+      const response = await axios.post("http://localhost:8080/api/auth/login", {
+        username,
+        password,
+      });
+      
+      // If login is successful (e.g., status code 200), navigate to the home page.
+      // You might also store a token from response.data if needed.
+      navigate("/home");
+    } catch (error) {
+      // If an error occurs (e.g., 401 Unauthorized), show error message.
+      console.error("Login error:", error);
+      setErrorMessage("Invalid username or password");
     }
   };
 
@@ -23,23 +33,26 @@ const Login = () => {
       <h1 style={styles.title}>Rental Properties Application</h1>
       <div style={styles.loginBox}>
         <h2>Sign In</h2>
-        <input
-          type="text"
-          placeholder="Username"
-          style={styles.input}
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          style={styles.input}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button style={styles.button} onClick={handleLogin}>
-          Login
-        </button>
+        {errorMessage && <div style={styles.error}>{errorMessage}</div>}
+        <form onSubmit={handleLogin}>
+          <input
+            type="text"
+            placeholder="Username"
+            style={styles.input}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            style={styles.input}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="submit" style={styles.button}>
+            Login
+          </button>
+        </form>
       </div>
     </div>
   );
@@ -49,8 +62,8 @@ const styles = {
   container: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
     height: "100vh",
     backgroundColor: "#f4f4f4",
   },
@@ -82,6 +95,10 @@ const styles = {
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
+  },
+  error: {
+    color: "red",
+    marginBottom: "10px",
   },
 };
 
