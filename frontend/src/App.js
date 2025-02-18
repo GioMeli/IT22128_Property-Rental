@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
 import Home from "./Home"; // <-- Make sure you have a Home.js component
+import ContactUs from "./ContactUs";
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
 
         {/* Home page => after login */}
         <Route path="/home" element={<Home />} />
+
+        <Route path="/contact" element={<ContactUs />} />
       </Routes>
     </Router>
   );
