@@ -1,14 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    // TODO: Replace this with your real login logic (e.g., call backend)
+    // For now, let's assume it's always successful:
+    if (username && password) {
+      navigate("/home"); // Go to the Home page
+    } else {
+      alert("Please enter both username and password");
+    }
+  };
+
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Rental Properties Application</h1>
       <div style={styles.loginBox}>
         <h2>Sign In</h2>
-        <input type="text" placeholder="Username" style={styles.input} />
-        <input type="password" placeholder="Password" style={styles.input} />
-        <button style={styles.button}>Login</button>
+        <input
+          type="text"
+          placeholder="Username"
+          style={styles.input}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          style={styles.input}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button style={styles.button} onClick={handleLogin}>
+          Login
+        </button>
       </div>
     </div>
   );
