@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import rentalLogo from "./assets/rental_logo.png";
-import houseIcon from "./assets/house_icon.png"; // Import the house icon
+import houseIcon from "./assets/house_icon.png"; // Ensure this image exists in src/assets/
 
 const Home = () => {
   // Dummy property data array with at least 15 properties
@@ -24,10 +25,17 @@ const Home = () => {
 
   return (
     <div style={styles.container}>
-      {/* Header: Logo and Title */}
+      {/* Header: Black bar with logo, title, and "Contact Us" link */}
       <div style={styles.header}>
-        <img src={rentalLogo} alt="Rental Properties Logo" style={styles.logo} />
-        <h1 style={styles.title}>Rental Properties Application</h1>
+        <div style={styles.logoContainer}>
+          <img src={rentalLogo} alt="Rental Logo" style={styles.logo} />
+          <h1 style={styles.headerTitle}>Rental Properties Application</h1>
+        </div>
+        <div style={styles.nav}>
+          <Link to="/contact" style={styles.navLink}>
+            Contact Us
+          </Link>
+        </div>
       </div>
 
       {/* Welcome Message */}
@@ -39,7 +47,7 @@ const Home = () => {
       <div style={styles.propertiesContainer}>
         {properties.map((property) => (
           <div key={property.id} style={styles.propertyCard}>
-            {/* House Icon Above Each Property */}
+            {/* House Sticker Icon */}
             <img src={houseIcon} alt="House Icon" style={styles.houseIcon} />
             <p><strong>Status:</strong> {property.status}</p>
             <p><strong>Location:</strong> {property.location}</p>
@@ -54,30 +62,41 @@ const Home = () => {
 
 const styles = {
   container: {
-    textAlign: "center",
-    padding: "20px",
     backgroundColor: "#f4f4f4",
     minHeight: "100vh",
   },
   header: {
+    backgroundColor: "black",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "10px 20px",
+  },
+  logoContainer: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: "40px",
-    marginBottom: "20px",
   },
   logo: {
     width: "80px",
     height: "80px",
     marginRight: "20px",
   },
-  title: {
+  headerTitle: {
+    color: "white",
     fontSize: "36px",
-    fontWeight: "bold",
+  },
+  nav: {
+    marginRight: "20px",
+  },
+  navLink: {
+    color: "white",
+    textDecoration: "none",
+    fontSize: "18px",
   },
   welcome: {
+    textAlign: "center",
     fontSize: "18px",
-    marginBottom: "30px",
+    margin: "20px",
   },
   propertiesContainer: {
     backgroundColor: "navy",
@@ -87,6 +106,7 @@ const styles = {
     flexWrap: "wrap",
     justifyContent: "center",
     gap: "15px",
+    margin: "20px",
   },
   propertyCard: {
     backgroundColor: "#fff",
@@ -101,8 +121,9 @@ const styles = {
     width: "30px",
     height: "30px",
     display: "block",
-    margin: "0 auto 10px auto",
+    margin: "0 auto 10px",
   },
 };
 
 export default Home;
+
