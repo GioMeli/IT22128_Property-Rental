@@ -16,11 +16,20 @@ public class PropertyController {
         this.propertyRepository = propertyRepository;
     }
 
+    // Get all properties
     @GetMapping
     public List<Property> getAllProperties() {
         return propertyRepository.findAll();
     }
 
+    // Get a property by ID (NEW)
+    @GetMapping("/{id}")
+    public Property getPropertyById(@PathVariable Long id) {
+        return propertyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Property not found with id: " + id));
+    }
+
+    // Create a new property
     @PostMapping
     public Property createProperty(@RequestBody Property property) {
         return propertyRepository.save(property);
