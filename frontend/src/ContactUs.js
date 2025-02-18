@@ -9,7 +9,6 @@ const ContactUs = () => {
       {/* Black Navigation Bar */}
       <div style={styles.navbar}>
         <button style={styles.navButton} onClick={() => navigate("/application-form")}>
-        <button style={styles.navButton} onClick={() => navigate("/home")}>
           Application Form
         </button>
       </div>
