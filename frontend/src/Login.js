@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 const Login = () => {
@@ -18,11 +18,9 @@ const Login = () => {
         password,
       });
       
-      // If login is successful (e.g., status code 200), navigate to the home page.
-      // You might also store a token from response.data if needed.
+      // If login is successful, navigate to the home page.
       navigate("/home");
     } catch (error) {
-      // If an error occurs (e.g., 401 Unauthorized), show error message.
       console.error("Login error:", error);
       setErrorMessage("Invalid username or password");
     }
@@ -31,28 +29,40 @@ const Login = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Rental Properties Application</h1>
-      <div style={styles.loginBox}>
-        <h2>Sign In</h2>
-        {errorMessage && <div style={styles.error}>{errorMessage}</div>}
-        <form onSubmit={handleLogin}>
-          <input
-            type="text"
-            placeholder="Username"
-            style={styles.input}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            style={styles.input}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="submit" style={styles.button}>
-            Login
-          </button>
-        </form>
+      <div style={styles.boxesContainer}>
+        {/* Sign In Box */}
+        <div style={styles.box}>
+          <h2>Sign In</h2>
+          {errorMessage && <div style={styles.error}>{errorMessage}</div>}
+          <form onSubmit={handleLogin}>
+            <input
+              type="text"
+              placeholder="Username"
+              style={styles.input}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              style={styles.input}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="submit" style={styles.button}>
+              Login
+            </button>
+          </form>
+        </div>
+
+        {/* Sign Up Box */}
+        <div style={styles.box}>
+          <h2>Sign Up</h2>
+          <p>If you don't have an account, please sign up!</p>
+          <Link to="/signup">
+            <button style={styles.button}>Sign Up</button>
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -60,19 +70,27 @@ const Login = () => {
 
 const styles = {
   container: {
+    backgroundColor: "navy",
+    minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh",
-    backgroundColor: "#f4f4f4",
+    padding: "20px",
   },
   title: {
+    color: "white",
     fontSize: "32px",
     fontWeight: "bold",
-    marginBottom: "20px",
+    marginBottom: "30px",
   },
-  loginBox: {
+  boxesContainer: {
+    display: "flex",
+    gap: "30px",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+  box: {
     backgroundColor: "#ddd",
     padding: "30px",
     borderRadius: "10px",
@@ -101,5 +119,8 @@ const styles = {
     marginBottom: "10px",
   },
 };
+
+export default Login;
+
 
 export default Login;
