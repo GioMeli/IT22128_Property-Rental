@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const MyProperties = () => {
   // State for storing properties (for now, using local state)
@@ -46,6 +47,11 @@ const MyProperties = () => {
 
   return (
     <div style={styles.container}>
+      {/* Header with Back to Home Page Button */}
+      <div style={styles.header}>
+        <Link to="/" style={styles.backButton}>Back to Home Page</Link>
+      </div>
+      
       <h1 style={styles.title}>My Properties</h1>
 
       {/* Yellow box form for adding a new property */}
@@ -90,9 +96,9 @@ const MyProperties = () => {
         </form>
       </div>
 
-      {/* List of available properties */}
+      {/* Yellow Box Displaying Active Added Properties */}
       <div style={styles.propertiesList}>
-        <h2 style={styles.listTitle}>Available Properties</h2>
+        <h2 style={styles.listTitle}>Active Available Properties</h2>
         {properties.length === 0 ? (
           <p>No properties added yet.</p>
         ) : (
@@ -117,6 +123,19 @@ const styles = {
     padding: "20px",
     color: "white",
     textAlign: "center",
+  },
+  header: {
+    width: "100%",
+    padding: "10px 20px",
+    textAlign: "left",
+  },
+  backButton: {
+    backgroundColor: "black",
+    color: "yellow",
+    padding: "10px 20px",
+    textDecoration: "none",
+    borderRadius: "5px",
+    fontSize: "16px",
   },
   title: {
     fontSize: "36px",
@@ -166,7 +185,7 @@ const styles = {
     marginTop: "5px",
   },
   propertiesList: {
-    backgroundColor: "white",
+    backgroundColor: "yellow", // Changed to yellow box for active properties
     color: "black",
     padding: "20px",
     borderRadius: "10px",
@@ -189,3 +208,4 @@ const styles = {
 };
 
 export default MyProperties;
+
