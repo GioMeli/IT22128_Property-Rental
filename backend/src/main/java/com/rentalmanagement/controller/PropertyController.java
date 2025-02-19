@@ -2,6 +2,7 @@ package com.rentalmanagement.controller;
 
 import com.rentalmanagement.model.Property;
 import com.rentalmanagement.repository.PropertyRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,22 +17,25 @@ public class PropertyController {
         this.propertyRepository = propertyRepository;
     }
 
-    // Get all properties
+    // GET /api/properties - Retrieve all properties
     @GetMapping
-    public List<Property> getAllProperties() {
-        return propertyRepository.findAll();
+    public ResponseEntity<List<Property>> getAllProperties() {
+        List<Property> properties = propertyRepository.findAll();
+        return ResponseEntity.ok(properties);
     }
 
-    // Get a property by ID (NEW)
+    // GET /api/properties/{id} - Retrieve a property by its ID
     @GetMapping("/{id}")
-    public Property getPropertyById(@PathVariable Long id) {
-        return propertyRepository.findById(id)
+    public ResponseEntity<Property> getPropertyById(@PathVariable Long id) {
+        Property property = propertyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Property not found with id: " + id));
+        return ResponseEntity.ok(property);
     }
 
-    // Create a new property
+    // POST /api/properties - Create a new property
     @PostMapping
-    public Property createProperty(@RequestBody Property property) {
-        return propertyRepository.save(property);
+    public ResponseEntity<Property> createProperty(@RequestBody Property property) {
+        Property savedProperty = propertyRepository.save(property);
+        return ResponseEntity.ok(savedProperty);
     }
 }
