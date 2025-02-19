@@ -133,4 +133,3 @@ const styles = {
 export default Signup;
 
 
-export default Signup;
