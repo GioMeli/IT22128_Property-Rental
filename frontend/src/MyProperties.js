@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const MyProperties = () => {
-  // State for storing properties (for now, using local state)
   const [properties, setProperties] = useState([]);
-
-  // State for the form inputs
   const [form, setForm] = useState({
     name: "",
     location: "",
@@ -15,45 +13,62 @@ const MyProperties = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Update form state when an input changes
+  // Fetch existing properties from the backend when component mounts
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/properties")
+      .then(response => {
+        setProperties(response.data);
+      })
+      .catch(err => {
+        console.error("Error fetching properties:", err);
+      });
+  }, []);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check that all fields are filled
     if (!form.name || !form.location || !form.cost || !form.bedrooms) {
       setError("All fields are required.");
       setSuccess("");
       return;
     }
     setError("");
-    setSuccess("Property added successfully!");
 
-    // Add the new property to the list (simulate an API call)
-    setProperties([...properties, { id: properties.length + 1, ...form }]);
+    try {
+      // Send the new property to the backend
+      const response = await axios.post("http://localhost:8080/api/properties", form);
+      setSuccess("Property added successfully!");
 
-    // Clear the form fields
-    setForm({
-      name: "",
-      location: "",
-      cost: "",
-      bedrooms: ""
-    });
+      // Option 1: Add the returned property to the list
+      setProperties([...properties, response.data]);
+
+      // Option 2: Or re-fetch the list:
+      // const res = await axios.get("http://localhost:8080/api/properties");
+      // setProperties(res.data);
+
+      // Clear the form
+      setForm({
+        name: "",
+        location: "",
+        cost: "",
+        bedrooms: ""
+      });
+    } catch (err) {
+      setError("Failed to add property. Try again.");
+      setSuccess("");
+    }
   };
 
   return (
     <div style={styles.container}>
-      {/* Header with Back to Home Page Button */}
       <div style={styles.header}>
         <Link to="/" style={styles.backButton}>Back to Home Page</Link>
       </div>
-      
       <h1 style={styles.title}>My Properties</h1>
-
       {/* Yellow box form for adding a new property */}
       <div style={styles.formContainer}>
         <h2 style={styles.formTitle}>Add New Property</h2>
@@ -95,7 +110,6 @@ const MyProperties = () => {
           <button type="submit" style={styles.button}>Add Property</button>
         </form>
       </div>
-
       {/* Yellow Box Displaying Active Added Properties */}
       <div style={styles.propertiesList}>
         <h2 style={styles.listTitle}>Active Available Properties</h2>
@@ -185,7 +199,7 @@ const styles = {
     marginTop: "5px",
   },
   propertiesList: {
-    backgroundColor: "yellow", // Changed to yellow box for active properties
+    backgroundColor: "yellow",
     color: "black",
     padding: "20px",
     borderRadius: "10px",
@@ -208,4 +222,5 @@ const styles = {
 };
 
 export default MyProperties;
+
 
