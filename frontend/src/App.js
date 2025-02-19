@@ -5,6 +5,7 @@ import Signup from "./Signup";
 import Home from "./Home"; // <-- Make sure you have a Home.js component
 import ContactUs from "./ContactUs";
 import ApplicationForm from "./ApplicationForm";
+import MyNotifications from "./MyNotifications";
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
         <Route path="/contact" element={<ContactUs />} />
 
         <Route path="/application-form" element={<ApplicationForm />} />
+
+        <Route path="/notifications" element={<MyNotifications />} />
       </Routes>
     </Router>
   );
