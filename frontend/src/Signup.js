@@ -59,7 +59,10 @@ const Signup = () => {
           </button>
         </form>
         <p style={styles.footerText}>
-          Already have an account? <a href="/login" style={styles.link}>Log in</a>
+          Already have an account? 
+          <button style={styles.linkButton} onClick={() => navigate("/login")}>
+            Log in
+          </button>
         </p>
       </div>
     </div>
@@ -123,13 +126,18 @@ const styles = {
     marginTop: "10px",
     fontSize: "14px",
   },
-  link: {
+  linkButton: {
+    background: "none",
+    border: "none",
     color: "#ffcc00",
-    textDecoration: "none",
+    fontSize: "14px",
     fontWeight: "bold",
+    cursor: "pointer",
+    textDecoration: "underline",
   },
 };
 
 export default Signup;
+
 
 
