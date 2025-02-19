@@ -33,8 +33,9 @@ const Home = () => {
         </div>
         <div style={styles.nav}>
           <Link to="/contact" style={styles.navLink}>Contact Us</Link>
-          <Link to="/application-form" style={styles.navLink}>Application Form</Link> {/* New Button */}
+          <Link to="/application-form" style={styles.navLink}>Application Form</Link>
           <Link to="/notifications" style={styles.navLink}>My Notifications</Link>
+          <Link to="/my-properties" style={styles.navLink}>My Properties</Link> {/* New Link */}
         </div>
       </div>
 
@@ -130,5 +131,6 @@ const styles = {
 };
 
 export default Home;
+
 
 
