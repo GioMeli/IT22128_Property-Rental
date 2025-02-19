@@ -7,11 +7,12 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setError(""); // Clear previous errors
+
     try {
       await axios.post("http://localhost:8080/api/auth/signup", {
         username,
@@ -19,8 +20,8 @@ const Signup = () => {
         password,
       });
 
-      setSuccess("Account created successfully! Redirecting...");
-      setTimeout(() => navigate("/login"), 2000); // Redirect after 2 seconds
+      // ✅ If signup is successful, navigate to Home
+      navigate("/home");
     } catch (err) {
       setError("Failed to create account. Try again.");
     }
@@ -31,7 +32,6 @@ const Signup = () => {
       <div style={styles.signupBox}>
         <h2 style={styles.title}>Sign Up</h2>
         {error && <p style={styles.error}>{error}</p>}
-        {success && <p style={styles.success}>{success}</p>}
         <form onSubmit={handleSignup} style={styles.form}>
           <input
             type="text"
@@ -39,6 +39,7 @@ const Signup = () => {
             style={styles.input}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
           />
           <input
             type="email"
@@ -46,6 +47,7 @@ const Signup = () => {
             style={styles.input}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <input
             type="password"
@@ -53,6 +55,7 @@ const Signup = () => {
             style={styles.input}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
           <button type="submit" style={styles.button}>
             Sign Up
@@ -118,10 +121,6 @@ const styles = {
     color: "red",
     marginBottom: "10px",
   },
-  success: {
-    color: "lightgreen",
-    marginBottom: "10px",
-  },
   footerText: {
     marginTop: "10px",
     fontSize: "14px",
@@ -138,6 +137,7 @@ const styles = {
 };
 
 export default Signup;
+
 
 
 
