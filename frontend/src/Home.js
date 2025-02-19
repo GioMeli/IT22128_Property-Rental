@@ -34,6 +34,7 @@ const Home = () => {
         <div style={styles.nav}>
           <Link to="/contact" style={styles.navLink}>Contact Us</Link>
           <Link to="/application-form" style={styles.navLink}>Application Form</Link> {/* New Button */}
+          <Link to="/notifications" style={styles.navLink}>My Notifications</Link>
         </div>
       </div>
 
