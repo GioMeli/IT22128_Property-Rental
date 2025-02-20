@@ -51,7 +51,19 @@ public class PropertyController {
         Property savedProperty = propertyRepository.save(property);
         return new ResponseEntity<>(savedProperty, HttpStatus.CREATED);
     }
+
+    // DELETE /api/properties/{id} - Delete a property by its ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProperty(@PathVariable Long id) {
+        if (!propertyRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Property not found with id: " + id);
+        }
+        propertyRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
+
 
 
 
