@@ -8,21 +8,26 @@ const MyProperties = () => {
     name: "",
     location: "",
     cost: "",
-    bedrooms: ""
+    bedrooms: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Fetch existing properties from the backend when component mounts
+  // Fetch existing properties when component mounts
   useEffect(() => {
-    axios.get("http://localhost:8080/api/properties")
-      .then(response => {
+    fetchProperties();
+  }, []);
+
+  const fetchProperties = () => {
+    axios
+      .get("http://localhost:8080/api/properties")
+      .then((response) => {
         setProperties(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Error fetching properties:", err);
       });
-  }, []);
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -39,27 +44,34 @@ const MyProperties = () => {
     setError("");
 
     try {
-      // Send the new property to the backend
-      const response = await axios.post("http://localhost:8080/api/properties", form);
+      // Send new property to backend
+      const response = await axios.post(
+        "http://localhost:8080/api/properties",
+        form
+      );
       setSuccess("Property added successfully!");
-
-      // Option 1: Add the returned property to the list
       setProperties([...properties, response.data]);
 
-      // Option 2: Or re-fetch the list:
-      // const res = await axios.get("http://localhost:8080/api/properties");
-      // setProperties(res.data);
-
-      // Clear the form
+      // Clear form
       setForm({
         name: "",
         location: "",
         cost: "",
-        bedrooms: ""
+        bedrooms: "",
       });
     } catch (err) {
       setError("Failed to add property. Try again.");
       setSuccess("");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/properties/${id}`);
+      setProperties(properties.filter((property) => property.id !== id));
+    } catch (err) {
+      console.error("Failed to delete property:", err);
+      setError("Failed to delete property.");
     }
   };
 
@@ -69,7 +81,8 @@ const MyProperties = () => {
         <Link to="/" style={styles.backButton}>Back to Home Page</Link>
       </div>
       <h1 style={styles.title}>My Properties</h1>
-      {/* Yellow box form for adding a new property */}
+
+      {/* Form for Adding a New Property */}
       <div style={styles.formContainer}>
         <h2 style={styles.formTitle}>Add New Property</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
@@ -110,7 +123,8 @@ const MyProperties = () => {
           <button type="submit" style={styles.button}>Add Property</button>
         </form>
       </div>
-      {/* Yellow Box Displaying Active Added Properties */}
+
+      {/* List of Active Available Properties */}
       <div style={styles.propertiesList}>
         <h2 style={styles.listTitle}>Active Available Properties</h2>
         {properties.length === 0 ? (
@@ -122,6 +136,12 @@ const MyProperties = () => {
               <p><strong>Location:</strong> {property.location}</p>
               <p><strong>Cost:</strong> {property.cost}</p>
               <p><strong>Bedrooms:</strong> {property.bedrooms}</p>
+              <button
+                style={styles.deleteButton}
+                onClick={() => handleDelete(property.id)}
+              >
+                Delete Property
+              </button>
             </div>
           ))
         )}
@@ -189,6 +209,16 @@ const styles = {
     borderRadius: "5px",
     cursor: "pointer",
     fontSize: "16px",
+  },
+  deleteButton: {
+    marginTop: "10px",
+    backgroundColor: "red",
+    color: "white",
+    padding: "10px 15px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "14px",
   },
   error: {
     color: "red",
