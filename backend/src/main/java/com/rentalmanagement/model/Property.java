@@ -9,12 +9,19 @@ import jakarta.persistence.GenerationType;
 @Entity
 @Table(name = "properties")
 public class Property {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String address;
-    private boolean available;
+    private String name;
+    private String location;
+    private String cost;
+    private int bedrooms;
+
+    // Default constructor
+    public Property() {
+    }
 
     // Getters and setters
     public Long getId() {
@@ -23,17 +30,32 @@ public class Property {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getAddress() {
-        return address;
+
+    public String getName() {
+        return name;
     }
-    public void setAddress(String address) {
-        this.address = address;
+    public void setName(String name) {
+        this.name = name;
     }
-    public boolean isAvailable() {
-        return available;
+
+    public String getLocation() {
+        return location;
     }
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getCost() {
+        return cost;
+    }
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
+    public int getBedrooms() {
+        return bedrooms;
+    }
+    public void setBedrooms(int bedrooms) {
+        this.bedrooms = bedrooms;
     }
 }
-
