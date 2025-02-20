@@ -36,9 +36,22 @@ public class PropertyController {
 
     // POST /api/properties - Create a new property
     @PostMapping
-    public ResponseEntity<Property> createProperty(@RequestBody Property property) {
+    public ResponseEntity<?> createProperty(@RequestBody Property property) {
+        // Basic validation: name, location, cost must be non-null and non-empty, bedrooms >= 1
+        if (property.getName() == null || property.getName().trim().isEmpty() ||
+            property.getLocation() == null || property.getLocation().trim().isEmpty() ||
+            property.getCost() == null || property.getCost().trim().isEmpty() ||
+            property.getBedrooms() < 1) {
+            
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid property data. Please fill all required fields properly.");
+        }
+
         Property savedProperty = propertyRepository.save(property);
         return new ResponseEntity<>(savedProperty, HttpStatus.CREATED);
     }
+}
+
 }
 
