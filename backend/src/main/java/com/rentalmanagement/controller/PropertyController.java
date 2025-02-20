@@ -2,6 +2,7 @@ package com.rentalmanagement.controller;
 
 import com.rentalmanagement.model.Property;
 import com.rentalmanagement.repository.PropertyRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/properties")
+@CrossOrigin(origins = "http://localhost:3000") // Adjust this origin as needed
 public class PropertyController {
 
     private final PropertyRepository propertyRepository;
@@ -36,6 +38,7 @@ public class PropertyController {
     @PostMapping
     public ResponseEntity<Property> createProperty(@RequestBody Property property) {
         Property savedProperty = propertyRepository.save(property);
-        return ResponseEntity.ok(savedProperty);
+        return new ResponseEntity<>(savedProperty, HttpStatus.CREATED);
     }
 }
+
