@@ -24,15 +24,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
+            .cors().and() // Enable CORS
+            .csrf().disable() // Disable CSRF for JWT authentication
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll() // Public access
-                .anyRequest().authenticated() // Protect all other endpoints
+                .requestMatchers("/api/auth/**").permitAll() // Allow auth routes
+                .anyRequest().authenticated() // Secure all other routes
             )
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Use JWT, no sessions
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Stateless JWT auth
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .exceptionHandling() // Handle unauthorized access properly
+            .and()
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // JWT Filter
 
         return http.build();
     }
@@ -47,3 +50,4 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
+
