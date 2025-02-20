@@ -1,6 +1,6 @@
 package com.rentalmanagement.config;
 
-import com.rentalmanagement.service.JWT_Services.JwtAuthenticationFilter;
+import com.rentalmanagement.service.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
