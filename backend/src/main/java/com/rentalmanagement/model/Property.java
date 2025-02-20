@@ -1,10 +1,6 @@
 package com.rentalmanagement.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "properties")
@@ -18,15 +14,24 @@ public class Property {
     private String location;
     private String cost;
     private int bedrooms;
+    private boolean available;
 
-    // Default constructor
-    public Property() {
+    // Constructors
+    public Property() {}
+
+    public Property(String name, String location, String cost, int bedrooms, boolean available) {
+        this.name = name;
+        this.location = location;
+        this.cost = cost;
+        this.bedrooms = bedrooms;
+        this.available = available;
     }
 
-    // Getters and setters
+    // Getters and Setters
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -34,6 +39,7 @@ public class Property {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -41,6 +47,7 @@ public class Property {
     public String getLocation() {
         return location;
     }
+
     public void setLocation(String location) {
         this.location = location;
     }
@@ -48,6 +55,7 @@ public class Property {
     public String getCost() {
         return cost;
     }
+
     public void setCost(String cost) {
         this.cost = cost;
     }
@@ -55,7 +63,17 @@ public class Property {
     public int getBedrooms() {
         return bedrooms;
     }
+
     public void setBedrooms(int bedrooms) {
         this.bedrooms = bedrooms;
     }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 }
+
