@@ -27,7 +27,7 @@ public class SecurityConfig {
             .cors().and() // Enable CORS
             .csrf().disable() // Disable CSRF for JWT authentication
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // Allow auth routes
+                .requestMatchers("/", "/api/auth/**").permitAll() // Allow root and auth routes
                 .anyRequest().authenticated() // Secure all other routes
             )
             .sessionManagement(session -> session
