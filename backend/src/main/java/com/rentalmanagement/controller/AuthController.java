@@ -1,6 +1,5 @@
 package com.rentalmanagement.controller;
 
-import com.rentalmanagement.model.User;
 import com.rentalmanagement.repository.UserRepository;
 import com.rentalmanagement.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
