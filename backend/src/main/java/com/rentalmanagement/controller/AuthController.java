@@ -7,7 +7,6 @@ import com.rentalmanagement.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -19,17 +18,14 @@ import java.util.Optional;
 public class AuthController {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     public AuthController(UserRepository userRepository, 
-                          PasswordEncoder passwordEncoder, 
                           JwtService jwtService,
                           CustomUserDetailsService customUserDetailsService) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.customUserDetailsService = customUserDetailsService;
     }
@@ -41,8 +37,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body(Map.of("error", "Username is already taken."));
         }
 
-        // Hash the password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Store the password as plain text (NOT recommended for production)
+        user.setPassword(user.getPassword());
         userRepository.save(user);
 
         return ResponseEntity.ok(Map.of("message", "User registered successfully."));
@@ -54,7 +50,7 @@ public class AuthController {
         Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
 
         if (existingUser.isPresent() &&
-            passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
+            existingUser.get().getPassword().equals(user.getPassword())) {
             
             // Load UserDetails from custom service
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
