@@ -10,18 +10,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements CustomUserDetailsService {
 
     private final UserRepository userRepository;
 
     // Constructor injection
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    // Save user (for registration)
-    public User save(User user) {
-        return userRepository.save(user);
     }
 
     // Load user by username for authentication (convert User to UserDetails)
