@@ -53,8 +53,10 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody User user) {
         Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
 
-        if (existingUser.isPresent() && passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
-            // Convert User to UserDetails using the custom service
+        if (existingUser.isPresent() &&
+            passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
+            
+            // Load UserDetails from custom service
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
             String token = jwtService.generateToken(userDetails);
             return ResponseEntity.ok(Map.of(
@@ -66,5 +68,6 @@ public class AuthController {
         }
     }
 }
+
 
 
