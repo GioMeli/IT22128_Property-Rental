@@ -1,68 +1,46 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Clear previous error
-    try {
-      // Replace with your backend login endpoint URL.
-      const response = await axios.post("http://localhost:8080/api/auth/login", {
-        username,
-        password,
-      });
-      
-      // If login is successful, navigate to the home page.
+    // Check credentials against hardcoded values
+    if (username === "it22128" && password === "123Gm456") {
+      // If correct, navigate to the Home page
       navigate("/home");
-    } catch (error) {
-      console.error("Login error:", error);
-      setErrorMessage("Invalid username or password");
+    } else {
+      setError("Invalid username or password.");
     }
   };
 
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Rental Properties Application</h1>
-      <div style={styles.boxesContainer}>
-        {/* Sign In Box */}
-        <div style={styles.box}>
-          <h2>Sign In</h2>
-          {errorMessage && <div style={styles.error}>{errorMessage}</div>}
-          <form onSubmit={handleLogin}>
-            <input
-              type="text"
-              placeholder="Username"
-              style={styles.input}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              style={styles.input}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button type="submit" style={styles.button}>
-              Login
-            </button>
-          </form>
-        </div>
-
-        {/* Sign Up Box */}
-        <div style={styles.box}>
-          <h2>Sign Up</h2>
-          <p>If you don't have an account, please sign up!</p>
-          <Link to="/signup">
-            <button style={styles.button}>Sign Up</button>
-          </Link>
-        </div>
+      <div style={styles.loginBox}>
+        <h2>Sign In</h2>
+        {error && <div style={styles.error}>{error}</div>}
+        <form onSubmit={handleLogin}>
+          <input
+            type="text"
+            placeholder="Username"
+            style={styles.input}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            style={styles.input}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="submit" style={styles.button}>Login</button>
+        </form>
       </div>
     </div>
   );
@@ -71,26 +49,19 @@ const Login = () => {
 const styles = {
   container: {
     backgroundColor: "navy",
-    minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    padding: "20px",
+    height: "100vh",
+    color: "white",
   },
   title: {
-    color: "white",
     fontSize: "32px",
     fontWeight: "bold",
-    marginBottom: "30px",
+    marginBottom: "20px",
   },
-  boxesContainer: {
-    display: "flex",
-    gap: "30px",
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
-  box: {
+  loginBox: {
     backgroundColor: "#ddd",
     padding: "30px",
     borderRadius: "10px",
@@ -121,5 +92,4 @@ const styles = {
 };
 
 export default Login;
-
 
