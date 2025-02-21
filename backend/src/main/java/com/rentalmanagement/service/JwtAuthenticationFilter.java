@@ -1,48 +1,55 @@
-package com.rentalmanagement.controller;
+package com.rentalmanagement.service;
 
-import com.rentalmanagement.model.User;
-import com.rentalmanagement.repository.UserRepository;
-import com.rentalmanagement.service.JwtService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
 
-import java.util.Optional;
+@Component
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-@RestController
-@RequestMapping("/api/auth")
-public class AuthController {
-
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService; // Make sure this is your custom UserDetailsService
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
     }
 
-    @PostMapping("/signup")
-    public String signup(@RequestBody User user) {
-        // Check if username already exists
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            return "Username already taken";
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, 
+                                    HttpServletResponse response, 
+                                    FilterChain chain)
+            throws ServletException, IOException {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            chain.doFilter(request, response);
+            return;
         }
 
-        // Hash the password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        String token = authHeader.substring(7);
+        String username = jwtService.extractUsername(token);
 
-        return "User registered successfully!";
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
-        if (existingUser.isPresent() && passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
-            return jwtService.generateToken(existingUser.get());
-        } else {
-            return "Invalid username or password";
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // Load user details using your custom UserDetailsService
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (jwtService.validateToken(token, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
         }
+        chain.doFilter(request, response);
     }
 }
+
