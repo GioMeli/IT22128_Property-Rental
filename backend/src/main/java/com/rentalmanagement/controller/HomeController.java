@@ -11,3 +11,4 @@ public class HomeController {
         return "Welcome to the Rental Management Backend!";
     }
 }
+
