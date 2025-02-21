@@ -7,31 +7,23 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError(""); // Clear previous errors
-    setSuccess(""); // Clear previous success message
 
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/signup", {
+      await axios.post("http://localhost:8080/api/auth/signup", {
         username,
         email,
         password,
       });
 
-      if (response.status === 201) {
-        setSuccess("Account created successfully! Redirecting to login...");
-        setTimeout(() => navigate("/login"), 2000); // Redirect after 2 seconds
-      }
+      // ✅ If signup is successful, navigate to Home
+      navigate("/home");
     } catch (err) {
-      if (err.response && err.response.data) {
-        setError(err.response.data.message || "Failed to create account. Try again.");
-      } else {
-        setError("Something went wrong. Please try again.");
-      }
+      setError("Failed to create account. Try again.");
     }
   };
 
@@ -40,7 +32,6 @@ const Signup = () => {
       <div style={styles.signupBox}>
         <h2 style={styles.title}>Sign Up</h2>
         {error && <p style={styles.error}>{error}</p>}
-        {success && <p style={styles.success}>{success}</p>}
         <form onSubmit={handleSignup} style={styles.form}>
           <input
             type="text"
@@ -130,10 +121,6 @@ const styles = {
     color: "red",
     marginBottom: "10px",
   },
-  success: {
-    color: "green",
-    marginBottom: "10px",
-  },
   footerText: {
     marginTop: "10px",
     fontSize: "14px",
@@ -150,7 +137,6 @@ const styles = {
 };
 
 export default Signup;
-
 
 
 
