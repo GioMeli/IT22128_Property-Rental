@@ -17,16 +17,17 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    // Example endpoint for login (adjust as needed)
-    @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        // In a real application, you would authenticate the user.
-        // Here we simply return a dummy token if the user exists.
-        User existingUser = userRepository.findByUsername(user.getUsername());
-        if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
-            return "dummy-token";
-        } else {
-            throw new IllegalArgumentException("Invalid username or password.");
-        }
+@PostMapping("/login")
+public void login(@RequestBody User user, HttpServletResponse response) throws IOException {
+    Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+    if (existingUser.isPresent() && existingUser.get().getPassword().equals(user.getPassword())) {
+        // Generate token if needed
+        // For a redirect, simply send a redirect response
+        response.sendRedirect("http://localhost:3000/home");
+    } else {
+        response.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid username or password.");
     }
 }
+
+
+
