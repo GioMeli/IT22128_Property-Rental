@@ -10,7 +10,19 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     // Check credentials against hardcoded values
-    if (username === "it22128" && password === "123Gm456") || (username === 'GeorgiosMeli' && password === 'giorgos2001') || (username === 'admin' && password === 'root') {
+    if (username === "it22128" && password === "123Gm456") {
+      // If correct, navigate to the Home page
+      navigate("/home");
+    } else {
+      setError("Invalid username or password.");
+    }
+    if (username === 'GeorgiosMeli' && password === 'giorgos2001') {
+      // If correct, navigate to the Home page
+      navigate("/home");
+    } else {
+      setError("Invalid username or password.");
+    }
+    if (username === 'admin' && password === 'root') {
       // If correct, navigate to the Home page
       navigate("/home");
     } else {
