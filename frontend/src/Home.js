@@ -1,8 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; 
 import { Link } from "react-router-dom";
 import axios from "axios";
 import rentalLogo from "./assets/rental_logo.png";
 import houseIcon from "./assets/house_icon.png"; // Ensure this image exists in src/assets/
+
+// Dummy sample properties (in case backend returns fewer than 10)
+const sampleProperties = [
+  { id: 101, name: "Sample Apartment", location: "Athens/Ampelokipoi", cost: "$1200", bedrooms: 2 },
+  { id: 102, name: "Luxury Condo", location: "Athens/Kolonaki", cost: "$2200", bedrooms: 3 },
+  { id: 103, name: "Cozy Studio", location: "Athens/Evangelismos", cost: "$900", bedrooms: 1 },
+  { id: 104, name: "Spacious Loft", location: "Athnes/Syntagma", cost: "$1800", bedrooms: 2 },
+  { id: 105, name: "Modern House", location: "Patra/Athinon", cost: "$2500", bedrooms: 4 },
+  { id: 106, name: "Classic Villa", location: "Athens/Lykavitos", cost: "$3000", bedrooms: 5 },
+  { id: 107, name: "Budget Flat", location: "Thesalloniki/Tsimiski", cost: "$800", bedrooms: 1 },
+  { id: 108, name: "Penthouse Suite", location: "Thesalloniki/Aristotelous", cost: "$3500", bedrooms: 3 },
+  { id: 109, name: "Eco Home", location: "Athens/Alimo", cost: "$1600", bedrooms: 2 },
+  { id: 110, name: "Historic House", location: "Athens/Glyfada", cost: "$2000", bedrooms: 3 }
+];
 
 const Home = () => {
   const [properties, setProperties] = useState([]);
@@ -11,10 +25,17 @@ const Home = () => {
   useEffect(() => {
     axios.get("http://localhost:8080/api/properties")
       .then(response => {
-        setProperties(response.data);
+        const fetchedProperties = response.data;
+        // If fewer than 10 properties are returned, supplement with dummy properties
+        const combinedProperties = fetchedProperties.length < 10 
+          ? [...fetchedProperties, ...sampleProperties.slice(0, 10 - fetchedProperties.length)]
+          : fetchedProperties;
+        setProperties(combinedProperties);
       })
       .catch(err => {
         console.error("Error fetching properties:", err);
+        // In case of error, fallback to sample properties
+        setProperties(sampleProperties);
       });
   }, []);
 
@@ -129,6 +150,5 @@ const styles = {
 };
 
 export default Home;
-
 
 
