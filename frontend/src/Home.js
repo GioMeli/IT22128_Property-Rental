@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import rentalLogo from "./assets/rental_logo.png";
-import houseIcon from "./assets/house_icon.png"; // Ensure this image exists in src/assets/
 
-// Dummy sample properties (fallback in case backend returns fewer than 10)
+// URL for the new property icon (white house icon)
+const propertyIconUrl = "https://img.icons8.com/ios-filled/50/ffffff/house.png";
+
+// Dummy sample properties (in case backend returns fewer than 10)
 const sampleProperties = [
   { id: 101, name: "Sample Apartment", location: "Athens/Ampelokipoi", cost: "$1200", bedrooms: 2 },
   { id: 102, name: "Luxury Condo", location: "Athens/Kolonaki", cost: "$2200", bedrooms: 3 },
@@ -20,14 +22,13 @@ const sampleProperties = [
 
 const Home = () => {
   const [properties, setProperties] = useState([]);
-  const [showSignOutModal, setShowSignOutModal] = useState(false);
-  const navigate = useNavigate();
 
   // Fetch properties from backend on component mount
   useEffect(() => {
     axios.get("http://localhost:8080/api/properties")
       .then(response => {
         const fetchedProperties = response.data;
+        // If fewer than 10 properties are returned, supplement with dummy properties
         const combinedProperties = fetchedProperties.length < 10 
           ? [...fetchedProperties, ...sampleProperties.slice(0, 10 - fetchedProperties.length)]
           : fetchedProperties;
@@ -35,19 +36,14 @@ const Home = () => {
       })
       .catch(err => {
         console.error("Error fetching properties:", err);
+        // In case of error, fallback to sample properties
         setProperties(sampleProperties);
       });
   }, []);
 
-  const handleSignOut = () => {
-    // Close modal and navigate to root page
-    setShowSignOutModal(false);
-    navigate("/");
-  };
-
   return (
     <div style={styles.container}>
-      {/* Header with logo, title, navigation links, and Sign Out button */}
+      {/* Header: Black bar with logo, title, and navigation links */}
       <div style={styles.header}>
         <div style={styles.logoContainer}>
           <img src={rentalLogo} alt="Rental Logo" style={styles.logo} />
@@ -58,49 +54,26 @@ const Home = () => {
           <Link to="/application-form" style={styles.navLink}>Application Form</Link>
           <Link to="/notifications" style={styles.navLink}>My Notifications</Link>
           <Link to="/my-properties" style={styles.navLink}>My Properties</Link>
-          <button 
-            style={styles.signOutButton} 
-            onClick={() => setShowSignOutModal(true)}
-            title="Sign Out"
-          >
-            &#x1F511;
-          </button>
         </div>
       </div>
 
-      {/* Sign Out Confirmation Modal */}
-      {showSignOutModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <p style={styles.modalText}>Are you sure you want to sign out?</p>
-            <div style={styles.modalButtons}>
-              <button style={styles.modalButton} onClick={handleSignOut}>Yes</button>
-              <button style={styles.modalButton} onClick={() => setShowSignOutModal(false)}>No</button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Welcome Message */}
       <p style={styles.welcome}>
-        Welcome to our Properties application! Swipe through the listings below.
+        Welcome to the Properties application! Here you can find any properties you need.
       </p>
 
-      {/* Slider-like display: using a flex wrap for large cards */}
+      {/* Navy Blue Box Displaying Property Listings */}
       <div style={styles.propertiesContainer}>
         {properties.length === 0 ? (
-          <p style={styles.noProperties}>No properties available.</p>
+          <p>No properties available.</p>
         ) : (
           properties.map((property) => (
             <div key={property.id} style={styles.propertyCard}>
-              <img src={houseIcon} alt="House Icon" style={styles.houseIcon} />
-              <h2 style={styles.cardTitle}>
-                {property.name || "Unnamed Property"}
-              </h2>
-              <p style={styles.cardDetail}><strong>Location:</strong> {property.location}</p>
-              <p style={styles.cardDetail}><strong>Cost:</strong> {property.cost}</p>
-              <p style={styles.cardDetail}><strong>Bedrooms:</strong> {property.bedrooms}</p>
-              <p style={styles.cardDetail}><strong>Status:</strong> {property.status || "Available"}</p>
+              <img src={propertyIconUrl} alt="Property Icon" style={styles.houseIcon} />
+              <p><strong>Name:</strong> {property.name}</p>
+              <p><strong>Location:</strong> {property.location}</p>
+              <p><strong>Cost:</strong> {property.cost}</p>
+              <p><strong>Bedrooms:</strong> {property.bedrooms}</p>
             </div>
           ))
         )}
@@ -113,7 +86,6 @@ const styles = {
   container: {
     backgroundColor: "#f4f4f4",
     minHeight: "100vh",
-    fontFamily: "Arial, sans-serif",
   },
   header: {
     backgroundColor: "black",
@@ -138,7 +110,6 @@ const styles = {
   nav: {
     display: "flex",
     gap: "20px",
-    alignItems: "center",
   },
   navLink: {
     color: "white",
@@ -148,94 +119,37 @@ const styles = {
     backgroundColor: "#444",
     borderRadius: "5px",
   },
-  signOutButton: {
-    background: "none",
-    border: "none",
-    color: "#ffcc00",
-    fontSize: "24px",
-    cursor: "pointer",
-  },
   welcome: {
     textAlign: "center",
-    fontSize: "20px",
+    fontSize: "18px",
     margin: "20px",
-    color: "black",
   },
   propertiesContainer: {
     backgroundColor: "navy",
     padding: "20px",
     borderRadius: "10px",
-    margin: "20px",
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
-    gap: "20px",
+    gap: "15px",
+    margin: "20px",
   },
   propertyCard: {
-    backgroundColor: "black",
-    color: "white",
-    borderRadius: "10px",
-    padding: "20px",
-    width: "300px",
-    textAlign: "center",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.5)",
+    backgroundColor: "#fff",
+    color: "#000",
+    borderRadius: "5px",
+    padding: "10px",
+    minWidth: "200px",
+    textAlign: "left",
+    boxShadow: "0 0 5px rgba(0,0,0,0.2)",
   },
   houseIcon: {
-    width: "40px",
+    width: "40px", // Increased size for better visibility
     height: "40px",
-    marginBottom: "10px",
-  },
-  cardTitle: {
-    fontSize: "26px",
-    marginBottom: "10px",
-  },
-  cardDetail: {
-    fontSize: "18px",
-    margin: "5px 0",
-  },
-  noProperties: {
-    textAlign: "center",
-    fontSize: "20px",
-    color: "white",
-  },
-  // Modal styles
-  modalOverlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-  modal: {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    textAlign: "center",
-    width: "300px",
-  },
-  modalText: {
-    fontSize: "18px",
-    marginBottom: "20px",
-  },
-  modalButtons: {
-    display: "flex",
-    justifyContent: "space-around",
-  },
-  modalButton: {
-    padding: "10px 15px",
-    backgroundColor: "#ffcc00",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontWeight: "bold",
+    display: "block",
+    margin: "0 auto 10px",
   },
 };
 
 export default Home;
-
 
