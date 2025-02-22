@@ -4,7 +4,6 @@ import axios from "axios";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -18,7 +17,6 @@ const Signup = () => {
     try {
       await axios.post("http://localhost:8080/signup", {
         username,
-        email,
         password,
       });
 
@@ -46,14 +44,6 @@ const Signup = () => {
             required
           />
           <input
-            type="email"
-            placeholder="Email"
-            style={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
             type="password"
             placeholder="Password"
             style={styles.input}
@@ -65,7 +55,7 @@ const Signup = () => {
         </form>
         <p style={styles.footerText}>
           Already have an account?{" "}
-          <button style={styles.linkButton} onClick={() => navigate("/login")}>
+          <button style={styles.linkButton} onClick={() => navigate("http://localhost:3000/")}>
             Log in
           </button>
         </p>
