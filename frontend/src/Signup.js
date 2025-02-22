@@ -16,7 +16,7 @@ const Signup = () => {
     setSuccess("");  // Clear previous success message
 
     try {
-      await axios.post("http://localhost:8080/api/auth/signup", {
+      await axios.post("http://localhost:8080/signup", {
         username,
         email,
         password,
