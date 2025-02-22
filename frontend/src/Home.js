@@ -24,7 +24,7 @@ const Home = () => {
     { id: 14, status: "Available", location: "Cyprus/Nicosia", cost: "$1150", bedrooms: 1 },
     { id: 15, status: "Available", location: "Cyprus/Limmasol", cost: "$1750", bedrooms: 3 }
   ];
-  const [properties, setProperties] = useState([]);
+  
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/properties")
