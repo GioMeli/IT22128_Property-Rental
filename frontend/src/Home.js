@@ -6,9 +6,26 @@ import "slick-carousel/slick/slick-theme.css";
 import rentalLogo from "./assets/rental_logo.png";
 
 const Home = () => {
+   // Dummy property data array with at least 15 properties
+  const properties = [
+    { id: 1, status: "Available", location: "Athens/Ampelokipoi", cost: "$1500", bedrooms: 2 },
+    { id: 2, status: "Available", location: "Athens/Zografou", cost: "$1200", bedrooms: 3 },
+    { id: 3, status: "Available", location: "Athens/Panormou", cost: "$1300", bedrooms: 2 },
+    { id: 4, status: "Available", location: "Athens/Kolonak", cost: "$1600", bedrooms: 3 },
+    { id: 5, status: "Available", location: "Athens/Monastiraki", cost: "$1800", bedrooms: 2 },
+    { id: 6, status: "Available", location: "Athens/Syntagma", cost: "$1100", bedrooms: 1 },
+    { id: 7, status: "Available", location: "Thesalloniki/Tsimiski", cost: "$1400", bedrooms: 2 },
+    { id: 8, status: "Available", location: "Volos/Limani", cost: "$1700", bedrooms: 3 },
+    { id: 9, status: "Available", location: "Volos/Kentro", cost: "$2000", bedrooms: 4 },
+    { id: 10, status: "Available", location: "Pireas/Limani", cost: "$1300", bedrooms: 2 },
+    { id: 11, status: "Available", location: "Ioannina/Limani", cost: "$1250", bedrooms: 2 },
+    { id: 12, status: "Available", location: "Athens/Alimos", cost: "$1900", bedrooms: 3 },
+    { id: 13, status: "Available", location: "Athens/Glyfada", cost: "$2100", bedrooms: 4 },
+    { id: 14, status: "Available", location: "Cyprus/Nicosia", cost: "$1150", bedrooms: 1 },
+    { id: 15, status: "Available", location: "Cyprus/Limmasol", cost: "$1750", bedrooms: 3 }
+  ];
   const [properties, setProperties] = useState([]);
 
-  // Fetch properties from backend on component mount
   useEffect(() => {
     axios.get("http://localhost:8080/api/properties")
       .then(response => {
@@ -16,8 +33,6 @@ const Home = () => {
       })
       .catch(err => {
         console.error("Error fetching properties:", err);
-        // Optionally, you can set a fallback here:
-        // setProperties(sampleProperties);
       });
   }, []);
 
@@ -26,7 +41,7 @@ const Home = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,  // One large card at a time
+    slidesToShow: 1,  // One card at a time
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
@@ -45,7 +60,7 @@ const Home = () => {
         Welcome to our Properties application! Swipe through the listings below.
       </p>
 
-      {/* Slider Container */}
+      {/* Slider Container with navy blue background */}
       <div style={styles.sliderContainer}>
         {properties.length === 0 ? (
           <p style={styles.noProperties}>No properties available.</p>
@@ -109,10 +124,14 @@ const styles = {
     marginBottom: "20px",
     color: "black",
   },
+  // Slider container updated to navy blue background
   sliderContainer: {
     width: "80%",
     maxWidth: "800px",
     margin: "0 auto",
+    backgroundColor: "navy",
+    padding: "20px",
+    borderRadius: "10px",
   },
   slide: {
     display: "flex",
@@ -121,13 +140,15 @@ const styles = {
     height: "400px",
     padding: "20px",
   },
+  // Card now uses white text
   card: {
-    backgroundColor: "white",
+    backgroundColor: "transparent", // Transparent to show the navy background if desired
     borderRadius: "10px",
     padding: "30px",
     width: "100%",
     textAlign: "center",
     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
+    color: "white",
   },
   cardTitle: {
     fontSize: "28px",
@@ -140,8 +161,9 @@ const styles = {
   noProperties: {
     textAlign: "center",
     fontSize: "20px",
-    color: "black",
+    color: "white",
   },
 };
 
 export default Home;
+
