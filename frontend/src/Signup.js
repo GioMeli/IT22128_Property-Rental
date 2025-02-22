@@ -1,28 +1,26 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
 
-const Signup = () => {
+const SignUp = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setError("");    // Clear previous errors
-    setSuccess("");  // Clear previous success message
+    setMessage("");
+    setError("");
 
     try {
-      await axios.post("http://localhost:8080/signup", {
+      const response = await axios.post("http://localhost:8080/api/auth/signup", {
         username,
         password,
       });
-
-      setSuccess("User created successfully! Redirecting to login...");
-      // Redirect to the login page after 2 seconds
-      setTimeout(() => navigate("/login"), 2000);
+      // If successful, show success message
+      if (response.status === 200) {
+        setMessage("User created successfully!");
+      }
     } catch (err) {
       setError("Failed to create account. Try again.");
     }
@@ -32,8 +30,8 @@ const Signup = () => {
     <div style={styles.container}>
       <div style={styles.signupBox}>
         <h2 style={styles.title}>Sign Up</h2>
+        {message && <p style={styles.success}>{message}</p>}
         {error && <p style={styles.error}>{error}</p>}
-        {success && <p style={styles.success}>{success}</p>}
         <form onSubmit={handleSignup} style={styles.form}>
           <input
             type="text"
@@ -53,12 +51,6 @@ const Signup = () => {
           />
           <button type="submit" style={styles.button}>Sign Up</button>
         </form>
-        <p style={styles.footerText}>
-          Already have an account?{" "}
-          <button style={styles.linkButton} onClick={() => navigate("/login)}>
-            Log in
-          </button>
-        </p>
       </div>
     </div>
   );
@@ -66,24 +58,23 @@ const Signup = () => {
 
 const styles = {
   container: {
+    backgroundColor: "#f0f0f0",
+    height: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#d1d1d1", // Grey background
   },
   signupBox: {
-    backgroundColor: "navy", // Navy blue box
-    padding: "40px",         // Larger padding for a bigger window
-    borderRadius: "10px",
+    backgroundColor: "navy",
+    padding: "40px",
+    borderRadius: "8px",
+    width: "350px",
     textAlign: "center",
     boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
     color: "white",
-    width: "400px",          // Increase width for a nicer look
   },
   title: {
-    fontSize: "28px",
-    fontWeight: "bold",
+    fontSize: "24px",
     marginBottom: "20px",
   },
   form: {
@@ -91,50 +82,35 @@ const styles = {
     flexDirection: "column",
   },
   input: {
-    width: "100%",
     padding: "12px",
-    margin: "10px 0",
+    margin: "8px 0",
     borderRadius: "5px",
-    border: "1px solid white",
-    backgroundColor: "white",
-    color: "black",
+    border: "1px solid #ccc",
     fontSize: "16px",
+    color: "black",
   },
   button: {
-    backgroundColor: "#ffcc00", // Yellow button
-    color: "black",
     padding: "12px",
+    marginTop: "10px",
+    backgroundColor: "#ffcc00",
+    color: "black",
     border: "none",
     borderRadius: "5px",
-    cursor: "pointer",
     fontSize: "16px",
     fontWeight: "bold",
-    marginTop: "10px",
-  },
-  error: {
-    color: "red",
-    marginBottom: "10px",
+    cursor: "pointer",
   },
   success: {
     color: "lightgreen",
     marginBottom: "10px",
   },
-  footerText: {
-    marginTop: "15px",
-    fontSize: "14px",
-  },
-  linkButton: {
-    background: "none",
-    border: "none",
-    color: "#ffcc00",
-    fontSize: "14px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    textDecoration: "underline",
+  error: {
+    color: "red",
+    marginBottom: "10px",
   },
 };
 
-export default Signup;
+export default SignUp;
 
 
 
