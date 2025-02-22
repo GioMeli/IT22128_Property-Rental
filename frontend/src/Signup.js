@@ -55,7 +55,7 @@ const Signup = () => {
         </form>
         <p style={styles.footerText}>
           Already have an account?{" "}
-          <button style={styles.linkButton} onClick={() => navigate("http://localhost:3000/")}>
+          <button style={styles.linkButton} onClick={() => navigate("/login)}>
             Log in
           </button>
         </p>
