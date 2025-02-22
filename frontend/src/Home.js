@@ -1,22 +1,9 @@
-import React, { useState, useEffect } from "react"; 
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import rentalLogo from "./assets/rental_logo.png";
-import houseIcon from "./assets/house_icon.png"; // Ensure this image exists in src/assets/
-
-// Dummy sample properties (in case backend returns fewer than 10)
-const sampleProperties = [
-  { id: 101, name: "Sample Apartment", location: "Athens/Ampelokipoi", cost: "$1200", bedrooms: 2 },
-  { id: 102, name: "Luxury Condo", location: "Athens/Kolonaki", cost: "$2200", bedrooms: 3 },
-  { id: 103, name: "Cozy Studio", location: "Athens/Evangelismos", cost: "$900", bedrooms: 1 },
-  { id: 104, name: "Spacious Loft", location: "Athnes/Syntagma", cost: "$1800", bedrooms: 2 },
-  { id: 105, name: "Modern House", location: "Patra/Athinon", cost: "$2500", bedrooms: 4 },
-  { id: 106, name: "Classic Villa", location: "Athens/Lykavitos", cost: "$3000", bedrooms: 5 },
-  { id: 107, name: "Budget Flat", location: "Thesalloniki/Tsimiski", cost: "$800", bedrooms: 1 },
-  { id: 108, name: "Penthouse Suite", location: "Thesalloniki/Aristotelous", cost: "$3500", bedrooms: 3 },
-  { id: 109, name: "Eco Home", location: "Athens/Alimo", cost: "$1600", bedrooms: 2 },
-  { id: 110, name: "Historic House", location: "Athens/Glyfada", cost: "$2000", bedrooms: 3 }
-];
 
 const Home = () => {
   const [properties, setProperties] = useState([]);
@@ -25,55 +12,67 @@ const Home = () => {
   useEffect(() => {
     axios.get("http://localhost:8080/api/properties")
       .then(response => {
-        const fetchedProperties = response.data;
-        // If fewer than 10 properties are returned, supplement with dummy properties
-        const combinedProperties = fetchedProperties.length < 10 
-          ? [...fetchedProperties, ...sampleProperties.slice(0, 10 - fetchedProperties.length)]
-          : fetchedProperties;
-        setProperties(combinedProperties);
+        setProperties(response.data);
       })
       .catch(err => {
         console.error("Error fetching properties:", err);
-        // In case of error, fallback to sample properties
-        setProperties(sampleProperties);
+        // Optionally, you can set a fallback here:
+        // setProperties(sampleProperties);
       });
   }, []);
 
+  // Slider settings for react-slick
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,  // One large card at a time
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
+
   return (
     <div style={styles.container}>
-      {/* Header: Black bar with logo, title, and navigation links */}
-      <div style={styles.header}>
-        <div style={styles.logoContainer}>
-          <img src={rentalLogo} alt="Rental Logo" style={styles.logo} />
-          <h1 style={styles.headerTitle}>Rental Properties Application</h1>
-        </div>
-        <div style={styles.nav}>
-          <Link to="/contact" style={styles.navLink}>Contact Us</Link>
-          <Link to="/application-form" style={styles.navLink}>Application Form</Link>
-          <Link to="/notifications" style={styles.navLink}>My Notifications</Link>
-          <Link to="/my-properties" style={styles.navLink}>My Properties</Link>
-        </div>
-      </div>
+      {/* Header */}
+      <header style={styles.header}>
+        <img src={rentalLogo} alt="Rental Logo" style={styles.logo} />
+        <h1 style={styles.headerTitle}>Rental Properties Application</h1>
+      </header>
 
       {/* Welcome Message */}
       <p style={styles.welcome}>
-        Welcome to the Properties application! Here you can find any properties you need.
+        Welcome to our Properties application! Swipe through the listings below.
       </p>
 
-      {/* Navy Blue Box Displaying Property Listings */}
-      <div style={styles.propertiesContainer}>
+      {/* Slider Container */}
+      <div style={styles.sliderContainer}>
         {properties.length === 0 ? (
-          <p>No properties available.</p>
+          <p style={styles.noProperties}>No properties available.</p>
         ) : (
-          properties.map((property) => (
-            <div key={property.id} style={styles.propertyCard}>
-              <img src={houseIcon} alt="House Icon" style={styles.houseIcon} />
-              <p><strong>Name:</strong> {property.name}</p>
-              <p><strong>Location:</strong> {property.location}</p>
-              <p><strong>Cost:</strong> {property.cost}</p>
-              <p><strong>Bedrooms:</strong> {property.bedrooms}</p>
-            </div>
-          ))
+          <Slider {...sliderSettings}>
+            {properties.map((property) => (
+              <div key={property.id} style={styles.slide}>
+                <div style={styles.card}>
+                  <h2 style={styles.cardTitle}>
+                    {property.name || "Unnamed Property"}
+                  </h2>
+                  <p style={styles.cardDetail}>
+                    <strong>Location:</strong> {property.location}
+                  </p>
+                  <p style={styles.cardDetail}>
+                    <strong>Cost:</strong> {property.cost}
+                  </p>
+                  <p style={styles.cardDetail}>
+                    <strong>Bedrooms:</strong> {property.bedrooms}
+                  </p>
+                  <p style={styles.cardDetail}>
+                    <strong>Status:</strong> {property.status || "Available"}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </Slider>
         )}
       </div>
     </div>
@@ -84,17 +83,15 @@ const styles = {
   container: {
     backgroundColor: "#f4f4f4",
     minHeight: "100vh",
+    padding: "20px",
+    fontFamily: "Arial, sans-serif",
   },
   header: {
     backgroundColor: "black",
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
     padding: "10px 20px",
-  },
-  logoContainer: {
-    display: "flex",
-    alignItems: "center",
+    marginBottom: "20px",
   },
   logo: {
     width: "80px",
@@ -104,51 +101,47 @@ const styles = {
   headerTitle: {
     color: "white",
     fontSize: "36px",
-  },
-  nav: {
-    display: "flex",
-    gap: "20px",
-  },
-  navLink: {
-    color: "white",
-    textDecoration: "none",
-    fontSize: "18px",
-    padding: "10px 15px",
-    backgroundColor: "#444",
-    borderRadius: "5px",
+    margin: 0,
   },
   welcome: {
     textAlign: "center",
-    fontSize: "18px",
-    margin: "20px",
+    fontSize: "20px",
+    marginBottom: "20px",
+    color: "black",
   },
-  propertiesContainer: {
-    backgroundColor: "navy",
-    padding: "20px",
-    borderRadius: "10px",
+  sliderContainer: {
+    width: "80%",
+    maxWidth: "800px",
+    margin: "0 auto",
+  },
+  slide: {
     display: "flex",
-    flexWrap: "wrap",
     justifyContent: "center",
-    gap: "15px",
-    margin: "20px",
+    alignItems: "center",
+    height: "400px",
+    padding: "20px",
   },
-  propertyCard: {
-    backgroundColor: "#fff",
-    color: "#000",
-    borderRadius: "5px",
-    padding: "10px",
-    minWidth: "200px",
-    textAlign: "left",
-    boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+  card: {
+    backgroundColor: "white",
+    borderRadius: "10px",
+    padding: "30px",
+    width: "100%",
+    textAlign: "center",
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
   },
-  houseIcon: {
-    width: "30px",
-    height: "30px",
-    display: "block",
-    margin: "0 auto 10px",
+  cardTitle: {
+    fontSize: "28px",
+    marginBottom: "15px",
+  },
+  cardDetail: {
+    fontSize: "18px",
+    margin: "5px 0",
+  },
+  noProperties: {
+    textAlign: "center",
+    fontSize: "20px",
+    color: "black",
   },
 };
 
 export default Home;
-
-
