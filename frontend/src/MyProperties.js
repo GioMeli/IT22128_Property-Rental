@@ -78,7 +78,7 @@ const MyProperties = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <Link to="/" style={styles.backButton}>Back to Home Page</Link>
+        <Link to="/home" style={styles.backButton}>Back to Home Page</Link>
       </div>
       <h1 style={styles.title}>My Properties</h1>
 
