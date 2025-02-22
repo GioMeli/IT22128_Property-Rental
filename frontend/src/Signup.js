@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const SignUp = () => {
@@ -6,6 +7,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -26,43 +28,70 @@ const SignUp = () => {
     }
   };
 
+  const handleGoToLogin = () => {
+    // Navigate to the root page (http://localhost:3000/)
+    navigate("/");
+  };
+
   return (
     <div style={styles.container}>
-      <div style={styles.signupBox}>
-        <h2 style={styles.title}>Sign Up</h2>
-        {message && <p style={styles.success}>{message}</p>}
-        {error && <p style={styles.error}>{error}</p>}
-        <form onSubmit={handleSignup} style={styles.form}>
-          <input
-            type="text"
-            placeholder="Username"
-            style={styles.input}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            style={styles.input}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit" style={styles.button}>Sign Up</button>
-        </form>
+      <div style={styles.overlay}>
+        <div style={styles.signupBox}>
+          <h2 style={styles.title}>Sign Up</h2>
+          {message && <p style={styles.success}>{message}</p>}
+          {error && <p style={styles.error}>{error}</p>}
+          <form onSubmit={handleSignup} style={styles.form}>
+            <input
+              type="text"
+              placeholder="Username"
+              style={styles.input}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              style={styles.input}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button type="submit" style={styles.button}>
+              Sign Up
+            </button>
+          </form>
+
+          {/* Button to return to the root page */}
+          <div style={styles.loginSection}>
+            <p style={styles.loginText}>Already have an account?</p>
+            <button style={styles.loginButton} onClick={handleGoToLogin}>
+              Log In To Your Account
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 const styles = {
+  // Container with background image
   container: {
-    backgroundColor: "#f0f0f0",
+    backgroundImage: "url('https://source.unsplash.com/1600x900/?real-estate,building')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
     height: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  // Semi-transparent overlay for better readability
+  overlay: {
+    backgroundColor: "rgba(0, 0, 50, 0.7)",
+    padding: "40px",
+    borderRadius: "8px",
+    textAlign: "center",
   },
   signupBox: {
     backgroundColor: "navy",
@@ -97,6 +126,23 @@ const styles = {
     border: "none",
     borderRadius: "5px",
     fontSize: "16px",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
+  loginSection: {
+    marginTop: "20px",
+  },
+  loginText: {
+    marginBottom: "8px",
+    fontSize: "14px",
+  },
+  loginButton: {
+    backgroundColor: "#ffcc00",
+    color: "black",
+    padding: "10px 15px",
+    border: "none",
+    borderRadius: "5px",
+    fontSize: "14px",
     fontWeight: "bold",
     cursor: "pointer",
   },
