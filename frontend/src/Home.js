@@ -4,7 +4,7 @@ import axios from "axios";
 import rentalLogo from "./assets/rental_logo.png";
 
 // URL for the new property icon (white house icon)
-const propertyIconUrl = "https://img.icons8.com/ios-filled/50/ffffff/house.png";
+const propertyIconUrl = "https://cdn-icons-png.flaticon.com/512/9026/9026204.png";
 
 // Dummy sample properties (fallback in case backend returns fewer than 10)
 const sampleProperties = [
