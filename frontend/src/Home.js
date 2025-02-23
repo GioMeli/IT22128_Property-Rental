@@ -4,7 +4,7 @@ import axios from "axios";
 import rentalLogo from "./assets/rental_logo.png";
 
 // URL for the new property icon (white house icon)
-const propertyIconUrl = "https://cdn-icons-png.flaticon.com/512/9026/9026204.png";
+const propertyIconUrl = "https://www.pngmart.com/files/5/Rent-PNG-HD.png";
 
 // URL for the banner image above the properties
 const bannerImageUrl = "https://static.vecteezy.com/system/resources/thumbnails/036/603/175/small_2x/home-for-rent-3d-illustration-real-estate-concept-template-for-sales-rental-advertising-png.png";
