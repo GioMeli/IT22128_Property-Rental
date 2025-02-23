@@ -83,7 +83,7 @@ const ReadyToRent = () => {
   };
 
   const handleContact = () => {
-    navigate("/my-notifications");
+    navigate("/notifications");
   };
 
   return (
