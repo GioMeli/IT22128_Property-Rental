@@ -59,13 +59,13 @@ const MyNotifications = () => {
 
       {/* Email Form Section */}
       <div style={styles.emailSection}>
-        <h2 style={styles.subheader}>Send Email to Property Owner</h2>
+        <h2 style={styles.subheader}>Send Email to Possible Renter</h2>
         <form style={styles.form} onSubmit={handleSubmit}>
           <input
             type="email"
-            name="ownerEmail"
-            placeholder="Owner's Email"
-            value={emailForm.ownerEmail}
+            name="RentersEmail"
+            placeholder="Renter's Email"
+            value={emailForm.renterEmail}
             onChange={handleChange}
             style={styles.input}
           />
