@@ -6,6 +6,9 @@ import rentalLogo from "./assets/rental_logo.png";
 // URL for the new property icon (white house icon)
 const propertyIconUrl = "https://cdn-icons-png.flaticon.com/512/9026/9026204.png";
 
+// URL for the banner image above the properties
+const bannerImageUrl = "https://static.vecteezy.com/system/resources/thumbnails/036/603/175/small_2x/home-for-rent-3d-illustration-real-estate-concept-template-for-sales-rental-advertising-png.png";
+
 // Dummy sample properties (fallback in case backend returns fewer than 10)
 const sampleProperties = [
   { id: 101, name: "Sample Apartment", location: "Athens/Ampelokipoi", cost: "$1200", bedrooms: 2 },
@@ -42,7 +45,6 @@ const Home = () => {
   }, []);
 
   const handleSignOut = () => {
-    // Close modal and navigate to root page
     setShowSignOutModal(false);
     navigate("/");
   };
@@ -83,6 +85,11 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      {/* Banner Image above Available Properties */}
+      <div style={styles.bannerContainer}>
+        <img src={bannerImageUrl} alt="Home for Rent" style={styles.bannerImage} />
+      </div>
 
       {/* Welcome Message */}
       <p style={styles.welcome}>
@@ -164,6 +171,17 @@ const styles = {
     margin: "20px",
     color: "black",
   },
+  bannerContainer: {
+    textAlign: "center",
+    margin: "20px 0",
+  },
+  bannerImage: {
+    width: "90%",
+    maxWidth: "1000px",
+    height: "auto",
+    borderRadius: "10px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+  },
   propertiesContainer: {
     backgroundColor: "navy",
     padding: "20px",
@@ -240,4 +258,5 @@ const styles = {
 };
 
 export default Home;
+
 
