@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const ApplicationForm = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +12,20 @@ const ApplicationForm = () => {
   });
 
   const [error, setError] = useState("");
-  const [applications, setApplications] = useState([]); // List of submitted applications
+  const [applications, setApplications] = useState([]);
+
+  // Load existing applications from localStorage on mount
+  useEffect(() => {
+    const storedApps = localStorage.getItem("applications");
+    if (storedApps) {
+      setApplications(JSON.parse(storedApps));
+    }
+  }, []);
+
+  // Update localStorage whenever applications change
+  useEffect(() => {
+    localStorage.setItem("applications", JSON.stringify(applications));
+  }, [applications]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,9 +40,8 @@ const ApplicationForm = () => {
     }
 
     setError("");
-    // For demo, we add the application to the local state.
+    // Add the new application to the state (and therefore to localStorage)
     setApplications([...applications, formData]);
-    // Optionally, you can send this data to your backend with axios here.
     alert("Application Submitted Successfully!");
     // Clear the form
     setFormData({
@@ -51,7 +63,7 @@ const ApplicationForm = () => {
         <p style={styles.text}>
           Please fill out the application form below to apply for a rental property.
         </p>
-        <form style={styles.form} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={styles.form}>
           <label style={styles.label}>Full Name:</label>
           <input
             type="text"
