@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";  
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import rentalLogo from "./assets/rental_logo.png";
@@ -60,6 +60,7 @@ const Home = () => {
           <Link to="/application-form" style={styles.navLink}>Application Form</Link>
           <Link to="/notifications" style={styles.navLink}>My Notifications</Link>
           <Link to="/my-properties" style={styles.navLink}>My Properties</Link>
+          <Link to="/ready-to-rent" style={styles.navLink}>ReadyToRent</Link>
           <button 
             style={styles.signOutButton} 
             onClick={() => setShowSignOutModal(true)}
