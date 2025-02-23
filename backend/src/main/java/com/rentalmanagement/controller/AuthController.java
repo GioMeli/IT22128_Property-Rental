@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -28,6 +29,26 @@ public class AuthController {
         // Store username & password in plain text (testing only)
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "User created successfully."));
+    }
+
+
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody Map<String, String> credentials) {
+        String username = credentials.get("username");
+        String password = credentials.get("password");
+
+        Optional<User> user = userRepository.findByUsernameAndPassword(username, password);
+
+        Map<String, Object> response = new HashMap<>();
+        if (user.isPresent()) {
+            response.put("success", true);
+            response.put("message", "Login successful.");
+        } else {
+            response.put("success", false);
+            response.put("message", "Invalid username or password.");
+        }
+
+        return response;
     }
 }
 
