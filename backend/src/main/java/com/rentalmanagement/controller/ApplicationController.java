@@ -29,4 +29,14 @@ public class ApplicationController {
         List<Application> applications = applicationRepository.findAll();
         return ResponseEntity.ok(applications);
     }
+
+    @DeleteMapping("/{id}")
+public ResponseEntity<?> deleteApplication(@PathVariable Long id) {
+    if (!applicationRepository.existsById(id)) {
+        return ResponseEntity.notFound().build();
+    }
+    applicationRepository.deleteById(id);
+    return ResponseEntity.ok("Application deleted successfully.");
+}
+
 }
