@@ -30,6 +30,12 @@ public class ApplicationController {
         return ResponseEntity.ok(applications);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Application>> getAllApplications() {
+        List<Application> applications = applicationRepository.findAll();
+        return ResponseEntity.ok(applications);
+    }
+
     @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteApplication(@PathVariable Long id) {
     if (!applicationRepository.existsById(id)) {
