@@ -11,11 +11,10 @@ const ApplicationForm = () => {
     checkOutDate: "",
     duration: "",
   });
-
   const [error, setError] = useState("");
   const [applications, setApplications] = useState([]);
 
-  // Fetch existing applications from the backend
+  // Fetch existing applications from the backend on mount
   useEffect(() => {
     axios.get("http://localhost:8080/api/applications")
       .then(response => setApplications(response.data))
@@ -28,16 +27,19 @@ const ApplicationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!formData.duration) {
       setError("Duration is required.");
       return;
     }
-    setError("");
 
+    setError("");
     try {
       const response = await axios.post("http://localhost:8080/api/applications", formData);
-      setApplications([...applications, response.data]); // Add the new application to the list
+      // Add the new application (returned from backend with its id) to the state
+      setApplications([...applications, response.data]);
       alert("Application Submitted Successfully!");
+      // Clear the form
       setFormData({
         fullName: "",
         email: "",
@@ -50,6 +52,18 @@ const ApplicationForm = () => {
     } catch (err) {
       console.error(err);
       setError("Failed to submit application. Try again.");
+    }
+  };
+
+  // Delete an application by calling the backend DELETE endpoint
+  const handleDeleteApplication = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/applications/${id}`);
+      // Remove deleted application from state
+      setApplications(applications.filter(app => app.id !== id));
+    } catch (err) {
+      console.error("Error deleting application:", err);
+      alert("Failed to delete application. Please try again.");
     }
   };
 
@@ -144,7 +158,7 @@ const ApplicationForm = () => {
           <p style={styles.noApplications}>No applications submitted yet.</p>
         ) : (
           applications.map((app, index) => (
-            <div key={index} style={styles.applicationCard}>
+            <div key={app.id} style={styles.applicationCard}>
               <p><strong>Name:</strong> {app.fullName}</p>
               <p><strong>Email:</strong> {app.email}</p>
               <p><strong>Phone:</strong> {app.phoneNumber}</p>
@@ -152,6 +166,12 @@ const ApplicationForm = () => {
               <p><strong>Duration:</strong> {app.duration}</p>
               {app.checkInDate && <p><strong>Check-In:</strong> {app.checkInDate}</p>}
               {app.checkOutDate && <p><strong>Check-Out:</strong> {app.checkOutDate}</p>}
+              <button 
+                style={styles.deleteButton} 
+                onClick={() => handleDeleteApplication(app.id)}
+              >
+                Delete Application
+              </button>
             </div>
           ))
         )}
@@ -251,7 +271,16 @@ const styles = {
     marginBottom: "10px",
     boxShadow: "0 0 5px rgba(0,0,0,0.2)",
   },
+  deleteButton: {
+    marginTop: "10px",
+    backgroundColor: "red",
+    color: "white",
+    border: "none",
+    padding: "8px 12px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "14px",
+  },
 };
 
 export default ApplicationForm;
-
