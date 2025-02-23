@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import Axios for HTTP requests
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -7,25 +8,23 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Check credentials against hardcoded values
-    if (username === "it22128" && password === "123Gm456") {
-      // If correct, navigate to the Home page
-      navigate("/home");
-    } else {
-      setError("Invalid username or password.");
-    }
-    if (username === 'GeorgiosMeli' && password === 'giorgos2001') {
-      // If correct, navigate to the Home page
-      navigate("/home");
-    } else {
-      setError("Invalid username or password.");
-    }
-    if (username === 'admin' && password === 'root') {
-      // If correct, navigate to the Home page
-      navigate("/home");
-    } else {
+    setError(""); // Clear previous errors
+
+    try {
+      const response = await axios.post("http://localhost:8080/api/auth/login", {
+        username,
+        password,
+      });
+
+      if (response.data.success) {
+        navigate("/home"); // Navigate if login is successful
+      } else {
+        setError("Invalid username or password.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
       setError("Invalid username or password.");
     }
   };
@@ -74,7 +73,6 @@ const Login = () => {
 };
 
 const styles = {
-  // Full-page container with background image
   container: {
     backgroundImage: "url('https://source.unsplash.com/1600x900/?real-estate,building')",
     backgroundSize: "cover",
@@ -84,7 +82,6 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
   },
-  // Semi-transparent overlay to darken the background for readability
   overlay: {
     backgroundColor: "rgba(0, 0, 50, 0.8)",
     padding: "40px",
@@ -158,3 +155,4 @@ const styles = {
 };
 
 export default Login;
+
