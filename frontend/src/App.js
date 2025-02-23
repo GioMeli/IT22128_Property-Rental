@@ -7,6 +7,7 @@ import ContactUs from "./ContactUs";
 import ApplicationForm from "./ApplicationForm";
 import MyNotifications from "./MyNotifications";
 import MyProperties from "./MyProperties";
+import ReadyToRent from "./ReadyToRent";
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
         <Route path="/notifications" element={<MyNotifications />} />
 
         <Route path="/my-properties" element={<MyProperties />} />
+
+        <Route path="/ready-to-rent" element={<ReadyToRent />} />
       </Routes>
     </Router>
   );
