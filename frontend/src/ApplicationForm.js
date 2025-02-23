@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ApplicationForm = () => {
@@ -13,8 +14,9 @@ const ApplicationForm = () => {
   });
   const [error, setError] = useState("");
   const [applications, setApplications] = useState([]);
+  const navigate = useNavigate();
 
-  // Fetch existing applications from the backend on mount
+  // Load existing applications from the backend on mount
   useEffect(() => {
     axios.get("http://localhost:8080/api/applications")
       .then(response => setApplications(response.data))
@@ -65,6 +67,11 @@ const ApplicationForm = () => {
       console.error("Error deleting application:", err);
       alert("Failed to delete application. Please try again.");
     }
+  };
+
+  // Navigate back to the root page ("Available Properties")
+  const handleBackToProperties = () => {
+    navigate("/");
   };
 
   return (
@@ -166,8 +173,8 @@ const ApplicationForm = () => {
               <p><strong>Duration:</strong> {app.duration}</p>
               {app.checkInDate && <p><strong>Check-In:</strong> {app.checkInDate}</p>}
               {app.checkOutDate && <p><strong>Check-Out:</strong> {app.checkOutDate}</p>}
-              <button 
-                style={styles.deleteButton} 
+              <button
+                style={styles.deleteButton}
                 onClick={() => handleDeleteApplication(app.id)}
               >
                 Delete Application
@@ -175,6 +182,10 @@ const ApplicationForm = () => {
             </div>
           ))
         )}
+        {/* New Button to navigate back to available properties */}
+        <button style={styles.backButton} onClick={handleBackToProperties}>
+          Back to Available Properties
+        </button>
       </div>
     </div>
   );
@@ -281,6 +292,19 @@ const styles = {
     cursor: "pointer",
     fontSize: "14px",
   },
+  backButton: {
+    marginTop: "20px",
+    backgroundColor: "navy",
+    color: "white",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "16px",
+    fontWeight: "bold",
+    width: "100%",
+  },
 };
 
 export default ApplicationForm;
+
