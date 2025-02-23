@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const ApplicationForm = () => {
   const [formData, setFormData] = useState({
@@ -14,45 +15,42 @@ const ApplicationForm = () => {
   const [error, setError] = useState("");
   const [applications, setApplications] = useState([]);
 
-  // Load existing applications from localStorage on mount
+  // Fetch existing applications from the backend
   useEffect(() => {
-    const storedApps = localStorage.getItem("applications");
-    if (storedApps) {
-      setApplications(JSON.parse(storedApps));
-    }
+    axios.get("http://localhost:8080/api/applications")
+      .then(response => setApplications(response.data))
+      .catch(err => console.error("Error fetching applications:", err));
   }, []);
-
-  // Update localStorage whenever applications change
-  useEffect(() => {
-    localStorage.setItem("applications", JSON.stringify(applications));
-  }, [applications]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.duration) {
       setError("Duration is required.");
       return;
     }
-
     setError("");
-    // Add the new application to the state (and therefore to localStorage)
-    setApplications([...applications, formData]);
-    alert("Application Submitted Successfully!");
-    // Clear the form
-    setFormData({
-      fullName: "",
-      email: "",
-      phoneNumber: "",
-      preferredLocation: "",
-      checkInDate: "",
-      checkOutDate: "",
-      duration: "",
-    });
+
+    try {
+      const response = await axios.post("http://localhost:8080/api/applications", formData);
+      setApplications([...applications, response.data]); // Add the new application to the list
+      alert("Application Submitted Successfully!");
+      setFormData({
+        fullName: "",
+        email: "",
+        phoneNumber: "",
+        preferredLocation: "",
+        checkInDate: "",
+        checkOutDate: "",
+        duration: "",
+      });
+    } catch (err) {
+      console.error(err);
+      setError("Failed to submit application. Try again.");
+    }
   };
 
   return (
@@ -135,9 +133,7 @@ const ApplicationForm = () => {
 
           {error && <p style={styles.error}>{error}</p>}
 
-          <button type="submit" style={styles.submitButton}>
-            Submit Application
-          </button>
+          <button type="submit" style={styles.submitButton}>Submit Application</button>
         </form>
       </div>
 
@@ -258,3 +254,4 @@ const styles = {
 };
 
 export default ApplicationForm;
+
