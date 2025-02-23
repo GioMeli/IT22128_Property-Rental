@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const sampleApplications = [
@@ -56,6 +57,7 @@ const sampleApplications = [
 
 const ReadyToRent = () => {
   const [applications, setApplications] = useState([]);
+  const navigate = useNavigate();
 
   // Fetch applications from backend on component mount
   useEffect(() => {
@@ -64,7 +66,6 @@ const ReadyToRent = () => {
         const fetched = response.data;
         // Ensure at least 5 applications are displayed:
         if (fetched.length < 5) {
-          // Append sample applications to reach 5
           const needed = 5 - fetched.length;
           setApplications([...fetched, ...sampleApplications.slice(0, needed)]);
         } else {
@@ -73,14 +74,30 @@ const ReadyToRent = () => {
       })
       .catch(err => {
         console.error("Error fetching applications:", err);
-        // On error, use the sample applications
         setApplications(sampleApplications);
       });
   }, []);
 
+  const handleBack = () => {
+    navigate("/home");
+  };
+
+  const handleContact = () => {
+    navigate("/my-notifications");
+  };
+
   return (
     <div style={styles.pageContainer}>
       <div style={styles.windowContainer}>
+        {/* Header with buttons */}
+        <div style={styles.windowHeader}>
+          <button style={styles.headerButton} onClick={handleBack}>
+            Back to Available Properties
+          </button>
+          <button style={styles.headerButton} onClick={handleContact}>
+            Contact With Possible Renter
+          </button>
+        </div>
         <h1 style={styles.title}>Ready To Rent</h1>
         {applications.length === 0 ? (
           <p style={styles.noApplications}>No applications available.</p>
@@ -127,6 +144,21 @@ const styles = {
     overflowY: "auto",
     maxHeight: "80vh",
   },
+  windowHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "20px",
+  },
+  headerButton: {
+    backgroundColor: "#ffcc00",
+    color: "black",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    fontSize: "14px",
+  },
   title: {
     textAlign: "center",
     fontSize: "36px",
@@ -150,3 +182,4 @@ const styles = {
 };
 
 export default ReadyToRent;
+
