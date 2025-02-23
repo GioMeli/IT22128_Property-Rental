@@ -9,6 +9,9 @@ const propertyIconUrl = "https://cdn-icons-png.flaticon.com/512/9026/9026204.png
 // URL for the banner image above the properties
 const bannerImageUrl = "https://static.vecteezy.com/system/resources/thumbnails/036/603/175/small_2x/home-for-rent-3d-illustration-real-estate-concept-template-for-sales-rental-advertising-png.png";
 
+// URL for the bottom banner image
+const bottomBannerImageUrl = "https://e7.pngegg.com/pngimages/199/53/png-clipart-house-real-estate-renting-lease-property-real-estate-building-contract-thumbnail.png";
+
 // Dummy sample properties (fallback in case backend returns fewer than 10)
 const sampleProperties = [
   { id: 101, name: "Sample Apartment", location: "Athens/Ampelokipoi", cost: "$1200", bedrooms: 2 },
@@ -86,9 +89,9 @@ const Home = () => {
         </div>
       )}
 
-      {/* Banner Image above Available Properties */}
+      {/* Banner Image Above Available Properties */}
       <div style={styles.bannerContainer}>
-        <img src={bannerImageUrl} alt="Home for Rent" style={styles.bannerImage} />
+        <img src={bannerImageUrl} alt="Banner" style={styles.bannerImage} />
       </div>
 
       {/* Welcome Message */}
@@ -114,6 +117,11 @@ const Home = () => {
             </div>
           ))
         )}
+      </div>
+
+      {/* Additional Banner Image Below Available Properties */}
+      <div style={styles.bottomBannerContainer}>
+        <img src={bottomBannerImageUrl} alt="Additional Banner" style={styles.bottomBannerImage} />
       </div>
     </div>
   );
@@ -176,8 +184,8 @@ const styles = {
     margin: "20px 0",
   },
   bannerImage: {
-    width: "90%",
-    maxWidth: "1000px",
+    width: "60%",
+    maxWidth: "600px",
     height: "auto",
     borderRadius: "10px",
     boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
@@ -218,6 +226,17 @@ const styles = {
     textAlign: "center",
     fontSize: "20px",
     color: "white",
+  },
+  bottomBannerContainer: {
+    textAlign: "center",
+    margin: "20px 0",
+  },
+  bottomBannerImage: {
+    width: "60%", // Medium size image
+    maxWidth: "600px",
+    height: "auto",
+    borderRadius: "10px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
   },
   // Modal styles
   modalOverlay: {
