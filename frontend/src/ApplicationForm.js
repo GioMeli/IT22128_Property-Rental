@@ -71,7 +71,7 @@ const ApplicationForm = () => {
 
   // Navigate back to the root page ("Available Properties")
   const handleBackToProperties = () => {
-    navigate("/");
+    navigate("/home");
   };
 
   return (
@@ -146,7 +146,7 @@ const ApplicationForm = () => {
             type="text"
             name="duration"
             style={styles.input}
-            placeholder="Enter duration (e.g., 6 months)"
+            placeholder="Enter duration (e.g., 5 Days)"
             value={formData.duration}
             onChange={handleChange}
             required
