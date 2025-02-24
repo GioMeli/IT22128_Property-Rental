@@ -10,7 +10,7 @@ const propertyIconUrl = "https://cdn-icons-png.flaticon.com/512/9026/9026204.png
 const bannerImageUrl = "https://static.vecteezy.com/system/resources/thumbnails/036/603/175/small_2x/home-for-rent-3d-illustration-real-estate-concept-template-for-sales-rental-advertising-png.png";
 
 // URL for the second banner image
-const bottomBannerImageUrl = "https://e7.pngegg.com/pngimages/199/53/png-clipart-house-real-estate-renting-lease-property-real-estate-building-contract-thumbnail.png";
+const bottomBannerImageUrl = "https://www.lettingagenttoday.co.uk/wp-content/uploads/sites/2/BuildToRent-400x310-1.png";
 
 // Dummy sample properties (fallback in case backend returns fewer than 10)
 const sampleProperties = [
