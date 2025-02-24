@@ -1,162 +1,72 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import Axios for HTTP requests
 
-const MyProperties = () => {
-  const [properties, setProperties] = useState([]);
-  const [form, setForm] = useState({
-    name: "",
-    location: "",
-    cost: "",
-    bedrooms: "",
-  });
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
-  // Fetch existing properties when component mounts
-  useEffect(() => {
-    fetchProperties();
-  }, []);
-
-  const fetchProperties = () => {
-    axios
-      .get("http://localhost:8080/api/properties")
-      .then((response) => {
-        setProperties(response.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching properties:", err);
-      });
-  };
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (!form.name || !form.location || !form.cost || !form.bedrooms) {
-      setError("All fields are required.");
-      setSuccess("");
-      return;
-    }
-    setError("");
+    setError(""); // Clear previous errors
 
     try {
-      // Send new property to backend
-      const response = await axios.post(
-        "http://localhost:8080/api/properties",
-        form
-      );
-      setSuccess("Property added successfully!");
-      setProperties([...properties, response.data]);
-
-      // Clear form
-      setForm({
-        name: "",
-        location: "",
-        cost: "",
-        bedrooms: "",
+      const response = await axios.post("http://localhost:8080/api/auth/login", {
+        username,
+        password,
       });
-    } catch (err) {
-      setError("Failed to add property. Try again.");
-      setSuccess("");
-    }
-  };
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8080/api/properties/${id}`);
-      setProperties(properties.filter((property) => property.id !== id));
+      if (response.data.success) {
+        navigate("/home"); // Navigate if login is successful
+      } else {
+        setError("Invalid username or password.");
+      }
     } catch (err) {
-      console.error("Failed to delete property:", err);
-      setError("Failed to delete property.");
+      console.error("Login error:", err);
+      setError("Invalid username or password.");
     }
   };
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <Link to="/home" style={styles.backButton}>
-          Back to Home Page
-        </Link>
-      </div>
-      <h1 style={styles.title}>My Properties</h1>
-
-      {/* Form for Adding a New Property */}
-      <div style={styles.formContainer}>
-        <h2 style={styles.formTitle}>Add New Property</h2>
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Property Name"
-            value={form.name}
-            onChange={handleChange}
-            style={styles.input}
-          />
-          <input
-            type="text"
-            name="location"
-            placeholder="Location"
-            value={form.location}
-            onChange={handleChange}
-            style={styles.input}
-          />
-          <input
-            type="text"
-            name="cost"
-            placeholder="Cost (e.g., $1500/month)"
-            value={form.cost}
-            onChange={handleChange}
-            style={styles.input}
-          />
-          <input
-            type="number"
-            name="bedrooms"
-            placeholder="Number of Bedrooms"
-            value={form.bedrooms}
-            onChange={handleChange}
-            style={styles.input}
-          />
-          {error && <p style={styles.error}>{error}</p>}
-          {success && <p style={styles.success}>{success}</p>}
-          <button type="submit" style={styles.button}>
-            Add Property
-          </button>
-        </form>
-      </div>
-
-      {/* List of Active Available Properties */}
-      <div style={styles.propertiesList}>
-        <h2 style={styles.listTitle}>Active Available Properties</h2>
-        {properties.length === 0 ? (
-          <p>No properties added yet.</p>
-        ) : (
-          properties.map((property) => (
-            <div key={property.id} style={styles.propertyCard}>
-              <p>
-                <strong>Name:</strong> {property.name}
-              </p>
-              <p>
-                <strong>Location:</strong> {property.location}
-              </p>
-              <p>
-                <strong>Cost:</strong> {property.cost}
-              </p>
-              <p>
-                <strong>Bedrooms:</strong> {property.bedrooms}
-              </p>
-              <button
-                style={styles.deleteButton}
-                onClick={() => handleDelete(property.id)}
-              >
-                Delete Property
-              </button>
-            </div>
-          ))
-        )}
+      <div style={styles.overlay}>
+        <h1 style={styles.title}>Rental Properties Application</h1>
+        <div style={styles.loginBox}>
+          <h2 style={styles.loginTitle}>Sign In</h2>
+          {error && <div style={styles.error}>{error}</div>}
+          <form onSubmit={handleLogin}>
+            <input
+              type="text"
+              placeholder="Username"
+              style={styles.input}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              style={styles.input}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button type="submit" style={styles.button}>Login</button>
+          </form>
+          <div style={styles.signupContainer}>
+            <span style={styles.signupText}>
+              If you don't have an account, create account here:
+            </span>
+            <button 
+              style={styles.signupButton}
+              onClick={() => navigate("/signup")}
+            >
+              Create Account
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -164,109 +74,88 @@ const MyProperties = () => {
 
 const styles = {
   container: {
-    backgroundImage: "url('https://cdn-res.keymedia.com/cdn-cgi/image/w=840,h=504,f=auto/https://cdn-res.keymedia.com/cms/images/us/003/0355_638669324386385715.png')",
+    backgroundImage: "url('https://source.unsplash.com/1600x900/?real-estate,building')",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    minHeight: "100vh",
-    fontFamily: "Arial, sans-serif",
-    padding: "20px",
-    color: "white",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  header: {
-    width: "100%",
-    padding: "10px 20px",
-    textAlign: "left",
-  },
-  backButton: {
-    backgroundColor: "black",
-    color: "yellow",
-    padding: "10px 20px",
-    textDecoration: "none",
-    borderRadius: "5px",
-    fontSize: "16px",
+  overlay: {
+    backgroundColor: "rgba(0, 0, 50, 0.8)",
+    padding: "40px",
+    borderRadius: "10px",
+    textAlign: "center",
+    width: "450px",
   },
   title: {
+    color: "white",
     fontSize: "36px",
-    marginBottom: "20px",
+    fontWeight: "bold",
+    marginBottom: "30px",
+  },
+  loginBox: {
+    backgroundColor: "navy",
+    padding: "30px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
     textAlign: "center",
   },
-  formContainer: {
-    backgroundColor: "yellow",
-    color: "black",
-    padding: "20px",
-    borderRadius: "10px",
-    width: "50%",
-    margin: "20px auto",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-  },
-  formTitle: {
+  loginTitle: {
+    color: "white",
     fontSize: "28px",
-    marginBottom: "15px",
+    marginBottom: "20px",
   },
-  form: {
+  input: {
+    width: "90%",
+    padding: "12px",
+    margin: "10px 0",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    fontSize: "16px",
+  },
+  button: {
+    width: "95%",
+    padding: "12px",
+    backgroundColor: "#ffcc00",
+    color: "black",
+    border: "none",
+    borderRadius: "5px",
+    fontSize: "16px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    marginTop: "10px",
+  },
+  error: {
+    color: "red",
+    marginBottom: "10px",
+  },
+  signupContainer: {
+    marginTop: "20px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  input: {
-    width: "80%",
-    padding: "10px",
-    margin: "10px 0",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
+  signupText: {
+    color: "white",
+    fontSize: "14px",
+    marginBottom: "10px",
   },
-  button: {
-    marginTop: "10px",
-    backgroundColor: "black",
-    color: "yellow",
+  signupButton: {
+    backgroundColor: "#ffcc00",
+    color: "black",
     padding: "10px 20px",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
-    fontSize: "16px",
-  },
-  deleteButton: {
-    marginTop: "10px",
-    backgroundColor: "red",
-    color: "white",
-    padding: "10px 15px",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
     fontSize: "14px",
-  },
-  error: {
-    color: "red",
-    marginTop: "5px",
-  },
-  success: {
-    color: "green",
-    marginTop: "5px",
-  },
-  propertiesList: {
-    backgroundColor: "yellow",
-    color: "black",
-    padding: "20px",
-    borderRadius: "10px",
-    width: "50%",
-    margin: "20px auto",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-  },
-  listTitle: {
-    fontSize: "28px",
-    marginBottom: "15px",
-  },
-  propertyCard: {
-    backgroundColor: "#f4f4f4",
-    color: "black",
-    padding: "10px",
-    borderRadius: "5px",
-    margin: "10px 0",
-    textAlign: "left",
+    fontWeight: "bold",
   },
 };
 
-export default MyProperties;
+export default Login;
+
 
 
 
