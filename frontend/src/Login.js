@@ -74,7 +74,7 @@ const Login = () => {
 
 const styles = {
   container: {
-    backgroundImage: "url('https://source.unsplash.com/1600x900/?real-estate,building')",
+    backgroundImage: "url('https://cdn-res.keymedia.com/cdn-cgi/image/w=840,h=504,f=auto/https://cdn-res.keymedia.com/cms/images/us/003/0355_638669324386385715.png')",
     backgroundSize: "cover",
     backgroundPosition: "center",
     height: "100vh",
@@ -99,7 +99,7 @@ const styles = {
     backgroundColor: "navy",
     padding: "30px",
     borderRadius: "10px",
-    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+    boxShadow: "0 0 15px rgba(0, 0, 0, 0.3)",
     textAlign: "center",
   },
   loginTitle: {
@@ -155,7 +155,5 @@ const styles = {
 };
 
 export default Login;
-
-
 
 
