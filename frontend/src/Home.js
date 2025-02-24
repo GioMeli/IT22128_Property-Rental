@@ -95,10 +95,12 @@ const Home = () => {
         <img src={bottomBannerImageUrl} alt="Second Banner" style={styles.bottomBannerImage} />
       </div>
 
-      {/* Welcome Message */}
-      <p style={styles.welcome}>
-        Welcome to our Properties application! Swipe through the listings below.
-      </p>
+      {/* Welcome Box */}
+      <div style={styles.welcomeBox}>
+        <p style={styles.welcomeText}>
+          Welcome to our Properties application! Swipe through the listings below.
+        </p>
+      </div>
 
       {/* Navy Blue Box Displaying Property Listings */}
       <div style={styles.propertiesContainer}>
@@ -125,9 +127,7 @@ const Home = () => {
 
 const styles = {
   container: {
-    backgroundImage: "url('https://images2.alphacoders.com/663/663602.png')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundColor: "#f4f4f4",
     minHeight: "100vh",
     fontFamily: "Arial, sans-serif",
   },
@@ -171,12 +171,6 @@ const styles = {
     fontSize: "24px",
     cursor: "pointer",
   },
-  welcome: {
-    textAlign: "center",
-    fontSize: "20px",
-    margin: "20px",
-    color: "black",
-  },
   bannersContainer: {
     textAlign: "center",
     margin: "20px 0",
@@ -195,6 +189,19 @@ const styles = {
     height: "auto",
     borderRadius: "10px",
     boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+  },
+  welcomeBox: {
+    backgroundColor: "navy",
+    padding: "20px",
+    borderRadius: "10px",
+    margin: "20px auto",
+    width: "80%",
+    maxWidth: "800px",
+  },
+  welcomeText: {
+    color: "white",
+    fontSize: "20px",
+    textAlign: "center",
   },
   propertiesContainer: {
     backgroundColor: "navy",
@@ -272,4 +279,3 @@ const styles = {
 };
 
 export default Home;
-
