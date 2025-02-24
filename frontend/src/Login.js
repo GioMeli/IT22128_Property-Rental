@@ -74,7 +74,7 @@ const Login = () => {
 
 const styles = {
   container: {
-    backgroundImage: "url('https://cdn-res.keymedia.com/cdn-cgi/image/w=840,h=504,f=auto/https://cdn-res.keymedia.com/cms/images/us/003/0355_638669324386385715.png')",
+    backgroundImage: "url('https://images2.alphacoders.com/663/663602.png')",
     backgroundSize: "cover",
     backgroundPosition: "center",
     height: "100vh",
