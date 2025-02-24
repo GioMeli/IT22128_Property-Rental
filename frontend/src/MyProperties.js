@@ -78,7 +78,9 @@ const MyProperties = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <Link to="/home" style={styles.backButton}>Back to Home Page</Link>
+        <Link to="/home" style={styles.backButton}>
+          Back to Home Page
+        </Link>
       </div>
       <h1 style={styles.title}>My Properties</h1>
 
@@ -120,7 +122,9 @@ const MyProperties = () => {
           />
           {error && <p style={styles.error}>{error}</p>}
           {success && <p style={styles.success}>{success}</p>}
-          <button type="submit" style={styles.button}>Add Property</button>
+          <button type="submit" style={styles.button}>
+            Add Property
+          </button>
         </form>
       </div>
 
@@ -132,10 +136,18 @@ const MyProperties = () => {
         ) : (
           properties.map((property) => (
             <div key={property.id} style={styles.propertyCard}>
-              <p><strong>Name:</strong> {property.name}</p>
-              <p><strong>Location:</strong> {property.location}</p>
-              <p><strong>Cost:</strong> {property.cost}</p>
-              <p><strong>Bedrooms:</strong> {property.bedrooms}</p>
+              <p>
+                <strong>Name:</strong> {property.name}
+              </p>
+              <p>
+                <strong>Location:</strong> {property.location}
+              </p>
+              <p>
+                <strong>Cost:</strong> {property.cost}
+              </p>
+              <p>
+                <strong>Bedrooms:</strong> {property.bedrooms}
+              </p>
               <button
                 style={styles.deleteButton}
                 onClick={() => handleDelete(property.id)}
@@ -152,11 +164,13 @@ const MyProperties = () => {
 
 const styles = {
   container: {
-    backgroundColor: "navy",
+    backgroundImage: "url('https://www.wilmingtonforrent.com/images/blog/SPM-blog-should-you-sell.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
     minHeight: "100vh",
+    fontFamily: "Arial, sans-serif",
     padding: "20px",
     color: "white",
-    textAlign: "center",
   },
   header: {
     width: "100%",
@@ -174,6 +188,7 @@ const styles = {
   title: {
     fontSize: "36px",
     marginBottom: "20px",
+    textAlign: "center",
   },
   formContainer: {
     backgroundColor: "yellow",
