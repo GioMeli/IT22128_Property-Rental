@@ -45,7 +45,9 @@ const ContactUs = () => {
 
 const styles = {
   container: {
-    backgroundColor: "#f5f5f5",
+    backgroundImage: "url('https://www.internationalreagentresource.org/portals/6/Skins/IRR/img/ContactUs_Home.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
@@ -113,3 +115,4 @@ const styles = {
 };
 
 export default ContactUs;
+
