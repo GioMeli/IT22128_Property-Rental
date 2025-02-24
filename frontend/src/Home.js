@@ -125,7 +125,9 @@ const Home = () => {
 
 const styles = {
   container: {
-    backgroundColor: "#f4f4f4",
+    backgroundImage: "url('https://png.pngitem.com/pimgs/s/521-5211464_delivering-full-turn-key-building-technology-solutions-building.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
     minHeight: "100vh",
     fontFamily: "Arial, sans-serif",
   },
@@ -270,5 +272,4 @@ const styles = {
 };
 
 export default Home;
-
 
