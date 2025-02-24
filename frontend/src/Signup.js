@@ -78,7 +78,7 @@ const SignUp = () => {
 const styles = {
   // Container with background image
   container: {
-    backgroundImage: "url('https://source.unsplash.com/1600x900/?real-estate,building')",
+    backgroundImage: "url('https://images2.alphacoders.com/663/663602.png')",
     backgroundSize: "cover",
     backgroundPosition: "center",
     height: "100vh",
