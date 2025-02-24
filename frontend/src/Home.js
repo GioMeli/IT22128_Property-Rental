@@ -125,7 +125,7 @@ const Home = () => {
 
 const styles = {
   container: {
-    backgroundImage: "url('https://png.pngitem.com/pimgs/s/521-5211464_delivering-full-turn-key-building-technology-solutions-building.png')",
+    backgroundImage: "url('https://images2.alphacoders.com/663/663602.png')",
     backgroundSize: "cover",
     backgroundPosition: "center",
     minHeight: "100vh",
